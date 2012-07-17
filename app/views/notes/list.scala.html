@@ -1,0 +1,14 @@
+@(notes:Set[Note])
+
+<div>
+	<ul>
+		<li class="nav-header">
+			Notes
+		</li>
+		@for(note <- notes) {
+			<li>
+				@note.getContent()
+			</li>
+		} 
+	</ul>
+</div>
