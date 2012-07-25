@@ -6,12 +6,19 @@
 			Notebooks
 		</li>
 		@for(notebook <- notebooks) {
-		<li id="test" notebook-id="@notebook.getId()">
-			<a href="@routes.NotebookController.delete(notebook.getId())">
+		<li notebook-id="@notebook.getId()">
+			<a href="#">
 				@notebook.getTitle()
 				<i class="icon-trash"></i>
 			</a>
 		</li>
 		} 
+		<li class="nav-header">
+			Temporary links to create notebook and notes
+		</li>
+		<li>
+			<a href="/notebooks/create/xxxx">create notebook</a>
+			<a href="/notebooks/$notebookId/note/xxxx">create note</a>
+		</li>
 	</ul>
 </div>

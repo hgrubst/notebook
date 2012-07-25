@@ -1,26 +1,23 @@
 package models;
 
-import javax.persistence.ManyToOne;
+
 
 public class Note {
 
 //	@Transient
 //	private MarkdownService markdownService = new MarkdownSerivceImpl();
 	
-	private Long id;
+	private String id;
 
 	private String content;
 
 	private Integer position;
-	
-	@ManyToOne
-	private Notebook notebook;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -30,14 +27,6 @@ public class Note {
 
 	public void setContent(String content) {
 		this.content = content;
-	}
-
-	public Notebook getNotebook() {
-		return notebook;
-	}
-
-	public void setNotebook(Notebook notebook) {
-		this.notebook = notebook;
 	}
 
 	public Integer getPosition() {

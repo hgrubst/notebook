@@ -7,28 +7,46 @@ Notebook.notebooks={
 			var notebooks = $("#notebooks li[notebook-id]");
 			
 			notebooks.each(function(){
+				instance.makeShowable(this);
 				instance.makeDeletable(this);
 			});
 		},
 		
-		makeDeletable : function(notebook){
-			var instance = this;
+		makeShowable : function(notebook){
+			var id = $(notebook).attr("notebook-id");
 			
+			$("a", notebook).click(function(){
+				Notebook.notebooks.showNotebook(id);
+				return false;
+			});
+		},
+
+		makeDeletable : function(notebook){
 			var id = $(notebook).attr("notebook-id");
 			
 			$("i", notebook).click(function(){
-				instance.deleteNotebook(id, notebook);
+				Notebook.notebooks.deleteNotebook(id, notebook);
 				return false;
 			});
 		},
 		
+		showNotebook : function(notebookId){
+			alert("show notebook " + notebookId);
+			var url1 = jsRoutes.controllers.NoteController.list(notebookId);
+			var url = jsRoutes.controllers.NoteController.list(notebookId).ajax({
+				success : function(data){
+					$("#content").html(data);
+				},
+				error : function(){
+					alert("error");
+				}
+			});
+		},
+		
 		deleteNotebook : function(notebookId, notebook){
-			alert("delete " + notebookId);
-			
 			var url = jsRoutes.controllers.NotebookController.delete(notebookId).ajax({
 				success : function(){
 					$(notebook).remove();
-					alert("sucess");
 				},
 				error : function(){
 					alert("error");

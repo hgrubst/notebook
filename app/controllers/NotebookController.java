@@ -3,18 +3,32 @@ package controllers;
 import java.util.List;
 
 import models.Notebook;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import play.modules.spring.Spring;
 import play.mvc.Controller;
 import play.mvc.Result;
 import repositories.NotebookRepository;
+import service.NotebookService;
 import views.html.index;
 
 public class NotebookController extends Controller{
 
 	private static NotebookRepository notebookRepository = Spring.getBeanOfType(NotebookRepository.class);
+	private static NotebookService notebookService = Spring.getBeanOfType(NotebookService.class);
+	
+	static Logger log = LoggerFactory.getLogger(NotebookController.class);
 	
 	public static Result list(){
-		return ok(index.render((List<Notebook>)notebookRepository.findAll()));
+		List<Notebook> notebooks = (List<Notebook>)notebookRepository.findAll();
+		
+		for (Notebook notebook : notebooks) {
+			log.debug("notebook {} has {} notes", notebook.getId(), notebook.getNotes().size());
+		}
+		
+		return ok(index.render(notebooks));
 	}
 	
 	public static Result create(String title){
@@ -27,7 +41,7 @@ public class NotebookController extends Controller{
 	}
 	
 	public static Result delete(String id){
-		notebookRepository.delete(id);
+		notebookService.delete(id);
 		return ok();
 	}
 

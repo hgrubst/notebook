@@ -1,5 +1,6 @@
 package models;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -39,7 +40,9 @@ public class Notebook {
 	}
 
 	public void addNote(Note note){
-		note.setNotebook(this);
+		if(notes == null){
+			notes = new HashSet<Note>();
+		}
 		notes.add(note);
 	}
 }
