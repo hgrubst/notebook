@@ -37,7 +37,7 @@ public class NotebookController extends Controller{
 		
 		notebookRepository.save(notebook);
 
-		return ok();
+		return ok(notebook.getId());
 	}
 	
 	public static Result delete(String id){

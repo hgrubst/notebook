@@ -22,8 +22,9 @@ public class Application extends Controller {
 	public static Result javascriptRoutes() {
 		response().setContentType("text/javascript");
 		return ok(Routes.javascriptRouter("jsRoutes",
-				controllers.routes.javascript.NoteController.list(),
-				controllers.routes.javascript.NotebookController.delete()));
+				controllers.routes.javascript.NotebookController.create(),
+				controllers.routes.javascript.NotebookController.delete(),
+				controllers.routes.javascript.NoteController.list()));
 	}
 
 }

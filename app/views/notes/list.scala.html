@@ -1,14 +1,18 @@
 @(notes:Set[Note])
 
-<div>
-	<ul>
-		<li class="nav-header">
-			Notes
-		</li>
+<ul>
+	<li class="nav-header">
+		Notes
+	</li>
+	@if(notes != null){
 		@for(note <- notes) {
 			<li>
 				@note.getContent()
 			</li>
 		} 
-	</ul>
-</div>
+	}
+</ul>
+
+<textarea>
+put your text here
+</textarea>
