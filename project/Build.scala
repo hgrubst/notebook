@@ -11,7 +11,8 @@ object ApplicationBuild extends Build {
     	"commons-collections" % "commons-collections" % "3.2.1",
     	"org.springframework.data" % "spring-data-mongodb" % "1.0.2.RELEASE",
     	"play" %% "spring" % "2.0",
-    	"org.springframework" % "spring-test" % "3.1.1.RELEASE"
+    	"org.springframework" % "spring-test" % "3.1.1.RELEASE",
+        "org.markdownj" % "markdownj" % "0.3.0-1.0.2b4"
     )
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = JAVA).settings(
@@ -21,9 +22,10 @@ object ApplicationBuild extends Build {
       resolvers += "Spring Maven Release Repository" at "http://repo.springsource.org/libs-release",
 
       //for play spring
-      resolvers += "TAMU Release Repository" at "https://maven.library.tamu.edu/content/repositories/releases/"
+      resolvers += "TAMU Release Repository" at "https://maven.library.tamu.edu/content/repositories/releases/",
       
-            
+      //for markdownj
+      resolvers += "Sonatype scala tools" at "https://oss.sonatype.org/content/groups/scala-tools/"       
     )
 
 }

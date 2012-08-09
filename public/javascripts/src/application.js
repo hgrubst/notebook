@@ -7,4 +7,6 @@ function registerListeners(){
 //		new Notebook.notebook($(this));
 //	});
 	Notebook.notebooks.initialize();
+	Notebook.modal.initialize();
+	Notebook.note.initialize();
 }

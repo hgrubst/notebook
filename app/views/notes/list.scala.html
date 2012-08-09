@@ -1,18 +1,31 @@
 @(notes:Set[Note])
 
-<ul>
-	<li class="nav-header">
-		Notes
-	</li>
 	@if(notes != null){
 		@for(note <- notes) {
-			<li>
-				@note.getContent()
-			</li>
+			<div note-id="@note.getId()">
+				<div class="well" >
+					@note.getContent() @*should be getContentAsHtml*@
+				</div>
+				<div class="hide">
+					@note.getContent()
+				</div>
+			</div>
 		} 
+	}else{
+		<div note-id="">
+			<div class="well">Double click to create</div>
+			<div class="hide"></div>
+		</div>
 	}
-</ul>
 
-<textarea>
-put your text here
-</textarea>
+<div class="modal hide" id="note-modal">
+	<div class="modal-body">
+		<textarea>
+		put your text here
+		</textarea>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal">Close</a>
+    	<a href="#" class="btn btn-primary">Save changes</a>
+    </div>
+</div>

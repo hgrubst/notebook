@@ -1,11 +1,17 @@
 package models;
 
+import org.springframework.data.annotation.Transient;
+
+import play.modules.spring.Spring;
+
+import service.MarkdownService;
+
 
 
 public class Note {
 
-//	@Transient
-//	private MarkdownService markdownService = new MarkdownSerivceImpl();
+	@Transient
+	private MarkdownService markdownService = Spring.getBeanOfType(MarkdownService.class);
 	
 	private String id;
 
@@ -37,8 +43,7 @@ public class Note {
 		this.position = position;
 	}
 
-//	@Transient
-//	public String getContentAsHtml(){
-//		return markdownService.getHtml(getContent());
-//	}
+	public String getContentAsHtml(){
+		return markdownService.getHtml(getContent());
+	}
 }

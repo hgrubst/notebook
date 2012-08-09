@@ -23,11 +23,13 @@ public class NoteController extends Controller{
 		return ok(views.html.notes.list.render(notebookRepository.findOne(notebookId).getNotes()));
 	}
 	
-	public static Result create(String id, String noteContent){
-		Notebook notebook = notebookRepository.findOne(id);
+	public static Result create(String notebookId){
+		Notebook notebook = notebookRepository.findOne(notebookId);
+		
+		String markdown = request().body().asFormUrlEncoded().get("markdown")[0];
 		
 		Note note = new Note();
-		note.setContent(noteContent);
+		note.setContent(markdown);
 		noteRepository.save(note);
 
 		notebook.addNote(note);
@@ -36,5 +38,17 @@ public class NoteController extends Controller{
 		log.info("Sucessfully added note '{}' to notebook '{}'", note.getId(), notebook.getId());
 		
 		return ok();
+	}
+	
+	public static Result update(String noteId, String notebookId){
+		return ok();
+	}
+	
+	public static Result delete(String noteId, String notebookId){
+		return ok();		
+	}
+	
+	public static Result html(String noteId, String notebookId){
+		return ok(noteRepository.findOne(noteId).getContentAsHtml());
 	}
 }

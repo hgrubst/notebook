@@ -24,6 +24,8 @@ public class Application extends Controller {
 		return ok(Routes.javascriptRouter("jsRoutes",
 				controllers.routes.javascript.NotebookController.create(),
 				controllers.routes.javascript.NotebookController.delete(),
+				controllers.routes.javascript.NoteController.create(),
+				controllers.routes.javascript.NoteController.html(),
 				controllers.routes.javascript.NoteController.list()));
 	}
 
