@@ -1,19 +1,19 @@
 package models;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 
-public class Notebook {
+public class Notebook extends AbstractAuditable{
 
 	private String id;
 
 	private String title;
 
 	@DBRef
-	private Set<Note> notes;
+	private List<Note> notes;
 	
 	public String getTitle() {
 		return title;
@@ -31,17 +31,17 @@ public class Notebook {
 		this.id = id;
 	}
 
-	public Set<Note> getNotes() {
+	public List<Note> getNotes() {
 		return notes;
 	}
 
-	public void setNotes(Set<Note> notes) {
+	public void setNotes(List<Note> notes) {
 		this.notes = notes;
 	}
 
 	public void addNote(Note note){
 		if(notes == null){
-			notes = new HashSet<Note>();
+			notes = new ArrayList<Note>();
 		}
 		notes.add(note);
 	}

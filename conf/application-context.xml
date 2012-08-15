@@ -20,5 +20,6 @@
 	<mongo:repositories base-package="repositories" />
 
 	<context:component-scan base-package="service" />
+	<context:component-scan base-package="repositories.listener" />
 
 </beans>

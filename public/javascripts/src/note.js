@@ -6,32 +6,48 @@ Notebook.note={
 			
 			this.selectors = {
 				"notes" : "div[note-id]",
-				"noteHtmlContentDiv" : "div[note-id] div:first", 
-				"noteMarkdownContentDiv" : "div[note-id] div:last", 
+				"noteHtmlContentDiv" : "div[note-id] div:first-child", 
+				"noteMarkdownContentDiv" : "div[note-id] div:last-child", 
 				"noteTextArea" : Notebook.modal.selectors["noteModal"] + " textarea",
 				"noteSaveButton" : Notebook.modal.selectors["noteModal"] + " a:last",
+				"activeNote" : "div[note-id].active",
+				"activeNoteHtmlContentDiv" : "div[note-id].active div:first-child"
 			}
 
-			instance.makeEditable();
-			instance.makeCreatable();
+			this.makeEditable();
+			this.makeCreatable();
 		},
 		
 		makeEditable : function(){
-			$(document).on("dblclick", Notebook.note.selectors["noteHtmlContentDiv"], function(){
+			var instance = this;
+			
+			$(document).on("dblclick", instance.selectors["noteHtmlContentDiv"], function(){
 				var noteId = $(this).parent().attr("note-id");
-				Notebook.note.editNote(noteId);
+				instance.editNote(noteId);
 			})
 		},
 
 		makeCreatable : function(){
-			$(document).on("click", Notebook.note.selectors["noteSaveButton"], function(){
-				Notebook.note.createNote();
+			var instance = this;
+			
+			$(document).on("click", instance.selectors["noteSaveButton"], function(){
+				var noteId = $(instance.selectors["activeNote"]).attr("note-id");
+				if(noteId == ""){
+					instance.createNote();
+				}else{
+					instance.updateNote(noteId);
+				}
 			})
 		},
 		
 		editNote : function(noteId){
+			this.activateNote(noteId);
+			
+			var markdown = $(this.selectors['activeNoteHtmlContentDiv']).html().trim();
+			
+			$(this.selectors["noteTextArea"]).val(markdown);
+
 			$(Notebook.modal.selectors["noteModal"]).modal("show");
-			Notebook.note.activateNote(noteId);
 		},
 		
 		createNote : function(){
@@ -40,7 +56,21 @@ Notebook.note={
 			jsRoutes.controllers.NoteController.create(notebookId).ajax({
 				data : {"markdown" : $(this.selectors["noteTextArea"]).val()},
 				success : function(data){
-					alert("success");
+					$(Notebook.modal.selectors["noteModal"]).modal("hide");
+				},
+				error : function(jqXHR, textStatus, errorThrown){
+					alert("error : " + errorThrown);
+				}
+			});
+		},
+
+		updateNote : function(noteId){
+			var notebookId = Notebook.notebooks.getActiveNotebookId();
+			
+			jsRoutes.controllers.NoteController.update(noteId, notebookId).ajax({
+				data : {"markdown" : $(this.selectors["noteTextArea"]).val()},
+				success : function(data){
+					$(Notebook.modal.selectors["noteModal"]).modal("hide");
 				},
 				error : function(jqXHR, textStatus, errorThrown){
 					alert("error : " + errorThrown);
@@ -57,6 +87,5 @@ Notebook.note={
 					$(this).removeClass("active");
 				}
 			});
-		},
-		
+		}
 }

@@ -25,6 +25,7 @@ public class Application extends Controller {
 				controllers.routes.javascript.NotebookController.create(),
 				controllers.routes.javascript.NotebookController.delete(),
 				controllers.routes.javascript.NoteController.create(),
+				controllers.routes.javascript.NoteController.update(),
 				controllers.routes.javascript.NoteController.html(),
 				controllers.routes.javascript.NoteController.list()));
 	}

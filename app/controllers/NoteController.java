@@ -41,6 +41,15 @@ public class NoteController extends Controller{
 	}
 	
 	public static Result update(String noteId, String notebookId){
+		String markdown = request().body().asFormUrlEncoded().get("markdown")[0];
+		
+		Note note = noteRepository.findOne(noteId);
+		note.setContent(markdown);
+		
+		noteRepository.save(note);
+		
+		log.info("Sucessfully updated note '{}' with new content : '{}'", note.getId(), note.getContent());
+		
 		return ok();
 	}
 	

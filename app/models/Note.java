@@ -3,12 +3,11 @@ package models;
 import org.springframework.data.annotation.Transient;
 
 import play.modules.spring.Spring;
-
 import service.MarkdownService;
 
 
 
-public class Note {
+public class Note extends AbstractAuditable{
 
 	@Transient
 	private MarkdownService markdownService = Spring.getBeanOfType(MarkdownService.class);
