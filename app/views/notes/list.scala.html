@@ -4,7 +4,7 @@
 		@for(note <- notes) {
 			<div note-id="@note.getId()">
 				<div class="well" >
-					@note.getContent() @*should be getContentAsHtml*@
+					@Html(note.getContentAsHtml())
 				</div>
 				<div class="hide">
 					@note.getContent()

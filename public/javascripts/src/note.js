@@ -11,7 +11,7 @@ Notebook.note={
 				"noteTextArea" : Notebook.modal.selectors["noteModal"] + " textarea",
 				"noteSaveButton" : Notebook.modal.selectors["noteModal"] + " a:last",
 				"activeNote" : "div[note-id].active",
-				"activeNoteHtmlContentDiv" : "div[note-id].active div:first-child"
+				"activeNoteMarkdownContentDiv" : "div[note-id].active div:last-child"
 			}
 
 			this.makeEditable();
@@ -43,7 +43,7 @@ Notebook.note={
 		editNote : function(noteId){
 			this.activateNote(noteId);
 			
-			var markdown = $(this.selectors['activeNoteHtmlContentDiv']).html().trim();
+			var markdown = $(this.selectors['activeNoteMarkdownContentDiv']).html().trim();
 			
 			$(this.selectors["noteTextArea"]).val(markdown);
 
@@ -57,6 +57,7 @@ Notebook.note={
 				data : {"markdown" : $(this.selectors["noteTextArea"]).val()},
 				success : function(data){
 					$(Notebook.modal.selectors["noteModal"]).modal("hide");
+					Notebook.notebooks.showNotebook(notebookId);
 				},
 				error : function(jqXHR, textStatus, errorThrown){
 					alert("error : " + errorThrown);
@@ -71,6 +72,7 @@ Notebook.note={
 				data : {"markdown" : $(this.selectors["noteTextArea"]).val()},
 				success : function(data){
 					$(Notebook.modal.selectors["noteModal"]).modal("hide");
+					Notebook.notebooks.showNotebook(notebookId);
 				},
 				error : function(jqXHR, textStatus, errorThrown){
 					alert("error : " + errorThrown);
