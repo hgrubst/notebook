@@ -10,16 +10,22 @@ import org.slf4j.LoggerFactory;
 import play.modules.spring.Spring;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import repositories.NotebookRepository;
 import service.NotebookService;
-import views.html.index;
+import views.html.*;
 
+@Security.Authenticated(Secured.class)
 public class NotebookController extends Controller{
 
 	private static NotebookRepository notebookRepository = Spring.getBeanOfType(NotebookRepository.class);
 	private static NotebookService notebookService = Spring.getBeanOfType(NotebookService.class);
 	
 	static Logger log = LoggerFactory.getLogger(NotebookController.class);
+	
+	public static Result index() {
+		return ok(index.render((List<Notebook>) notebookRepository.findAll()));
+	}
 	
 	public static Result list(){
 		List<Notebook> notebooks = (List<Notebook>)notebookRepository.findAll();

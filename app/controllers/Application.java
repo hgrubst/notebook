@@ -4,19 +4,65 @@ import java.util.List;
 
 import models.Notebook;
 import play.Routes;
+import play.data.Form;
 import play.modules.spring.Spring;
 import play.mvc.Controller;
 import play.mvc.Result;
 import repositories.NotebookRepository;
-import views.html.index;
+import service.UserService;
+import views.html.*;
 
 public class Application extends Controller {
 
 	private static NotebookRepository notebookRepository = Spring
 			.getBeanOfType(NotebookRepository.class);
 
-	public static Result index() {
-		return ok(index.render((List<Notebook>) notebookRepository.findAll()));
+	private static UserService userService = Spring
+			.getBeanOfType(UserService.class);
+
+	// -- Authentication
+
+	public static class Login {
+
+		public String email;
+		public String password;
+
+		public String validate() {
+			if (!userService.authenticate(email, password)) {
+				return "Invalid user or password";
+			}
+			return null;
+		}
+
+	}
+
+	/**
+	 * Login page.
+	 */
+	public static Result login() {
+		return ok(login.render(form(Login.class)));
+	}
+
+	/**
+	 * Handle login form submission.
+	 */
+	public static Result authenticate() {
+		Form<Login> loginForm = form(Login.class).bindFromRequest();
+		if (loginForm.hasErrors()) {
+			return badRequest(login.render(loginForm));
+		} else {
+			session("email", loginForm.get().email);
+			return redirect(routes.NotebookController.index());
+		}
+	}
+
+	/**
+	 * Logout and clean the session.
+	 */
+	public static Result logout() {
+		session().clear();
+		flash("success", "You've been logged out");
+		return redirect(routes.Application.login());
 	}
 
 	public static Result javascriptRoutes() {

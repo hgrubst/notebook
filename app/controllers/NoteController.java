@@ -9,9 +9,11 @@ import org.slf4j.LoggerFactory;
 import play.modules.spring.Spring;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import repositories.NoteRepository;
 import repositories.NotebookRepository;
 
+@Security.Authenticated(Secured.class)
 public class NoteController extends Controller{
 
 	static Logger log = LoggerFactory.getLogger(NoteController.class);

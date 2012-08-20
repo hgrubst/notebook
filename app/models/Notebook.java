@@ -15,6 +15,9 @@ public class Notebook extends AbstractAuditable{
 	@DBRef
 	private List<Note> notes;
 	
+	@DBRef
+	private User user;
+	
 	public String getTitle() {
 		return title;
 	}
@@ -44,5 +47,13 @@ public class Notebook extends AbstractAuditable{
 			notes = new ArrayList<Note>();
 		}
 		notes.add(note);
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

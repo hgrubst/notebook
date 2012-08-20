@@ -5,7 +5,12 @@
 #rest style urls : http://stackoverflow.com/questions/2001773/understanding-rest-verbs-error-codes-and-authentication
 
 # Home page
-GET     /                           controllers.Application.index()
+GET     /                           controllers.NotebookController.index()
+
+# Authentication
+GET     /login                      controllers.Application.login()
+POST    /login                      controllers.Application.authenticate()
+GET     /logout                     controllers.Application.logout()
 
 #Notebooks
 GET     /notebooks                  controllers.NotebookController.list()
