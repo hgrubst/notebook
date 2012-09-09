@@ -1,22 +1,22 @@
 package controllers;
 
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import models.Notebook;
 import play.Routes;
 import play.data.Form;
 import play.modules.spring.Spring;
 import play.mvc.Controller;
 import play.mvc.Result;
-import repositories.NotebookRepository;
+import play.mvc.With;
 import service.UserService;
-import views.html.*;
+import views.html.login;
 
+@With(ForceHttps.class)
 public class Application extends Controller {
 
-	private static NotebookRepository notebookRepository = Spring
-			.getBeanOfType(NotebookRepository.class);
-
+	static Logger log = LoggerFactory.getLogger(Application.class);
+	
 	private static UserService userService = Spring
 			.getBeanOfType(UserService.class);
 

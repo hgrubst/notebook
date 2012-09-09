@@ -11,7 +11,11 @@ object ApplicationBuild extends Build {
     	"commons-collections" % "commons-collections" % "3.2.1",
     	"org.springframework.data" % "spring-data-mongodb" % "1.0.2.RELEASE",
     	"play" %% "spring" % "2.0",
-    	"org.springframework" % "spring-test" % "3.1.1.RELEASE",
+    	"org.springframework" % "spring-core" % "3.1.2.RELEASE",
+    	"org.springframework" % "spring-context" % "3.1.2.RELEASE",
+    	"org.springframework" % "spring-beans" % "3.1.2.RELEASE",
+    	"org.springframework" % "spring-test" % "3.1.2.RELEASE",
+	"org.cloudfoundry" % "cloudfoundry-runtime" % "0.8.2",
         "org.markdownj" % "markdownj" % "0.3.0-1.0.2b4"
     )
 
@@ -20,6 +24,9 @@ object ApplicationBuild extends Build {
       
       //for spring
       resolvers += "Spring Maven Release Repository" at "http://repo.springsource.org/libs-release",
+
+      //for cloud foundry
+      resolvers += "Spring Maven Milestone Repository" at "http://maven.springframework.org/milestone",
 
       //for play spring
       resolvers += "TAMU Release Repository" at "https://maven.library.tamu.edu/content/repositories/releases/",

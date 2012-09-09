@@ -10,10 +10,12 @@ import play.modules.spring.Spring;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+import play.mvc.With;
 import repositories.NoteRepository;
 import repositories.NotebookRepository;
 
 @Security.Authenticated(Secured.class)
+@With(ForceHttps.class)
 public class NoteController extends Controller{
 
 	static Logger log = LoggerFactory.getLogger(NoteController.class);

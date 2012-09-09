@@ -11,11 +11,13 @@ import play.modules.spring.Spring;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+import play.mvc.With;
 import repositories.NotebookRepository;
 import service.NotebookService;
 import views.html.*;
 
 @Security.Authenticated(Secured.class)
+@With(ForceHttps.class)
 public class NotebookController extends Controller{
 
 	private static NotebookRepository notebookRepository = Spring.getBeanOfType(NotebookRepository.class);
