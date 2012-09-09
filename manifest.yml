@@ -1,0 +1,14 @@
+--- 
+applications: 
+  dist/notebook-1.0-SNAPSHOT.zip: 
+    framework: 
+      info: 
+        description: Play Framework Application
+        mem: 256M
+        exec: 
+      name: play
+    instances: 1
+    mem: 256M
+    runtime: java7
+    url: ${name}.${target-base}
+    name: notello
