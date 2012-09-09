@@ -16,7 +16,8 @@ object ApplicationBuild extends Build {
     	"org.springframework" % "spring-beans" % "3.1.2.RELEASE",
     	"org.springframework" % "spring-test" % "3.1.2.RELEASE",
 	"org.cloudfoundry" % "cloudfoundry-runtime" % "0.8.2",
-        "org.markdownj" % "markdownj" % "0.3.0-1.0.2b4"
+        "org.markdownj" % "markdownj" % "0.3.0-1.0.2b4",
+        "org.mindrot" % "jbcrypt" % "0.3m"
     )
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = JAVA).settings(
