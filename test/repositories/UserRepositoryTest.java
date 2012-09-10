@@ -10,14 +10,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "conf/application-context.xml")
+@ContextConfiguration(locations={"file:conf/application-context.xml","file:conf/application-context-test.xml"})
 public class UserRepositoryTest {
 
 	@Autowired
 	UserRepository userRepository;
 
 	@Test
-	public void test() {
+	public void findByEmail() {
 
 		String email = "test@notello.com";
 		String password = "test";

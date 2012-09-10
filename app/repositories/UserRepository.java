@@ -1,7 +1,5 @@
 package repositories;
 
-import java.util.List;
-
 import models.User;
 
 import org.springframework.data.repository.PagingAndSortingRepository;

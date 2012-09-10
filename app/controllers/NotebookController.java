@@ -14,51 +14,54 @@ import play.mvc.Security;
 import play.mvc.With;
 import repositories.NotebookRepository;
 import service.NotebookService;
-import views.html.*;
+import views.html.index;
 
 @Security.Authenticated(Secured.class)
 @With(ForceHttps.class)
-public class NotebookController extends Controller{
+public class NotebookController extends Controller {
 
-	private static NotebookRepository notebookRepository = Spring.getBeanOfType(NotebookRepository.class);
-	private static NotebookService notebookService = Spring.getBeanOfType(NotebookService.class);
-	
+	private static NotebookRepository notebookRepository = Spring
+			.getBeanOfType(NotebookRepository.class);
+	private static NotebookService notebookService = Spring
+			.getBeanOfType(NotebookService.class);
+
 	static Logger log = LoggerFactory.getLogger(NotebookController.class);
-	
+
 	public static Result index() {
-		return ok(index.render((List<Notebook>) notebookRepository.findAll()));
+		return list();
 	}
-	
-	public static Result list(){
-		List<Notebook> notebooks = (List<Notebook>)notebookRepository.findAll();
-		
-		for (Notebook notebook : notebooks) {
-			log.debug("notebook {} has {} notes", notebook.getId(), notebook.getNotes().size());
-		}
-		
+
+	public static Result list() {
+		List<Notebook> notebooks = (List<Notebook>) notebookRepository
+				.findByUserEmail(request().username());
+
+		log.debug("Found {} notebooks for user  {}", notebooks.size(),
+				request().username());
+
 		return ok(index.render(notebooks));
 	}
-	
-	public static Result create(String title){
+
+	public static Result create(String title) {
 		Notebook notebook = new Notebook();
 		notebook.setTitle(title);
-		
+		notebook.setUserEmail(request().username());
+
 		notebookRepository.save(notebook);
 
 		return ok(notebook.getId());
 	}
-	
-	public static Result delete(String id){
+
+	public static Result delete(String id) {
 		notebookService.delete(id);
 		return ok();
 	}
 
-	public static Result update(String id){
+	public static Result update(String id) {
 		String title = "figure out a way to get the title";
-		
+
 		Notebook notebook = notebookRepository.findOne(id);
 		notebook.setTitle(title);
-		
+
 		notebookRepository.save(notebook);
 
 		return ok();
