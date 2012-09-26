@@ -1,8 +1,25 @@
-@(notebooks:List[models.Notebook])
+@()
 
-@main(title="Notebook")(notebooks){
+@main(title="Notebook"){
 
+<div id="welcome">
 	Welcome to Notebook!
+</div>
 
+<div id="create-note" class="hide">
+	<div class="well">Double click to create</div>
+</div>
+
+<div class="modal hide" id="note-modal">
+	<div class="modal-body">
+		<textarea>
+		put your text here
+		</textarea>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal">Close</a>
+    	<a href="#" class="btn btn-primary">Save changes</a>
+    </div>
+</div>
 
 }

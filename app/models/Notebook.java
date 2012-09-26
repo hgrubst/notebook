@@ -3,9 +3,11 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 
+@JsonIgnoreProperties("notes")
 public class Notebook extends AbstractAuditable{
 
 	private String id;

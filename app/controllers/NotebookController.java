@@ -4,9 +4,11 @@ import java.util.List;
 
 import models.Notebook;
 
+import org.codehaus.jackson.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import play.libs.Json;
 import play.modules.spring.Spring;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -28,7 +30,7 @@ public class NotebookController extends Controller {
 	static Logger log = LoggerFactory.getLogger(NotebookController.class);
 
 	public static Result index() {
-		return list();
+		return ok(index.render());
 	}
 
 	public static Result list() {
@@ -38,17 +40,26 @@ public class NotebookController extends Controller {
 		log.debug("Found {} notebooks for user  {}", notebooks.size(),
 				request().username());
 
-		return ok(index.render(notebooks));
+		ObjectNode notebooksJson = Json.newObject();
+		notebooksJson.put("notebooks", Json.toJson(notebooks));
+
+		return ok(notebooksJson);
 	}
 
-	public static Result create(String title) {
+	public static Result create() {
+		
+		String title = request().body().asJson().get("title").asText();
+		
 		Notebook notebook = new Notebook();
 		notebook.setTitle(title);
 		notebook.setUserEmail(request().username());
 
 		notebookRepository.save(notebook);
 
-		return ok(notebook.getId());
+		ObjectNode response = Json.newObject();
+		response.put("id", notebook.getId());
+		
+		return ok(response);
 	}
 
 	public static Result delete(String id) {
@@ -57,7 +68,7 @@ public class NotebookController extends Controller {
 	}
 
 	public static Result update(String id) {
-		String title = "figure out a way to get the title";
+		String title = request().body().asFormUrlEncoded().get("title")[0];
 
 		Notebook notebook = notebookRepository.findOne(id);
 		notebook.setTitle(title);

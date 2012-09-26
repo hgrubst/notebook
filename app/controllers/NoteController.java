@@ -1,11 +1,15 @@
 package controllers;
 
+import java.util.List;
+
 import models.Note;
 import models.Notebook;
 
+import org.codehaus.jackson.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import play.libs.Json;
 import play.modules.spring.Spring;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -24,7 +28,15 @@ public class NoteController extends Controller{
 	private static NoteRepository noteRepository = Spring.getBeanOfType(NoteRepository.class);
 
 	public static Result list(String notebookId){
-		return ok(views.html.notes.list.render(notebookRepository.findOne(notebookId).getNotes()));
+		
+		//TODO: check that the notebook belongs to logged in user
+		
+		List<Note> notes = notebookRepository.findOne(notebookId).getNotes();
+		
+		ObjectNode notesJson = Json.newObject();
+		notesJson.put("notes", Json.toJson(notes));
+
+		return ok(notesJson);
 	}
 	
 	public static Result create(String notebookId){

@@ -3,6 +3,7 @@
 # ~~~~
 
 #rest style urls : http://stackoverflow.com/questions/2001773/understanding-rest-verbs-error-codes-and-authentication
+#test rest style urls : http://blogs.plexibus.com/2009/01/15/rest-esting-with-curl/
 
 # Home page
 GET     /                           controllers.NotebookController.index()
@@ -14,9 +15,9 @@ GET     /logout                     controllers.Application.logout()
 
 #Notebooks
 GET     /notebooks                  controllers.NotebookController.list()
-POST	/notebooks					controllers.NotebookController.create(title:String)
+POST	/notebooks					controllers.NotebookController.create()
 DELETE  /notebooks/:id       		controllers.NotebookController.delete(id:String)
-PUT     /notebook/:id     			controllers.NotebookController.update(id:String)
+PUT     /notebooks/:id     			controllers.NotebookController.update(id:String)
 
 #Notes
 GET     /notebooks/:notebookId/notes     	controllers.NoteController.list(notebookId:String)
@@ -32,5 +33,5 @@ GET     /assets/javascripts/routes  controllers.Application.javascriptRoutes()
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 #temp to create notebooks
-GET	/notebooks/create/:title		controllers.NotebookController.create(title:String)
+#GET	/notebooks/create/:title		controllers.NotebookController.create(title:String)
 #GET	/notebooks/:id/:note			controllers.NoteController.create(id:String, note:String)

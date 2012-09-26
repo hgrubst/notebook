@@ -1,4 +1,4 @@
-@(title: String)(notebooks: List[Notebook])(content: Html)
+@(title: String)(content: Html)
 
 <!DOCTYPE html>
 
@@ -13,6 +13,8 @@
         <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("javascripts/lib/markitup/sets/markdown/style.css")">
         
         <script src="@routes.Assets.at("javascripts/lib/jquery-1.7.2.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/lib/underscore.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/lib/backbone.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/lib/bootstrap.min.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/lib/markitup/jquery.markitup.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/lib/markitup/sets/markdown/set.js")" type="text/javascript"></script>
@@ -34,7 +36,20 @@
 		</header>    
 		
 		<div id="sidebar" class="span4">
-			@views.html.notebooks.list(notebooks)
+			<div class="well">
+				<ul id="notebooks" class="nav nav-list">
+					<li class="nav-header">
+						Notebooks
+					</li>
+					
+					<li>
+						<button id="create-notebook-button" class="btn btn-small">Create notebook</button>
+						<div id="create-notebook" class="input-append" style="display:none">
+							<input class="input-medium">
+						</div>
+					</li>				
+				</ul>
+			</div>
 		</div>
 		<div id="content" class="span8">
 	        @content

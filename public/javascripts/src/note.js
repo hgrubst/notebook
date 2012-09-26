@@ -1,3 +1,75 @@
+var Note = Backbone.Model.extend({
+});
+
+var NoteCollection = Backbone.Collection.extend({
+	model : Note,
+    parse: function(response){
+        return response.notes;
+    }
+});
+
+//the view for a single note
+var NoteView = Backbone.View.extend({
+	
+});
+
+//the view for a list of notes (eg all the notes of a notebook)
+var NotesView = Backbone.View.extend({
+	
+    events: {
+    	"dblclick #create-note" : "showNoteEditor",
+        "click save"   : "createNote",//click on save button of markitup editor
+    },
+	
+	setNotes : function(notes){
+		this.collection = notes;
+		this.collection.bind("add", this.addNote, this);
+		this.collection.bind("reset", this.renderNotes, this);
+	},
+
+	renderNotes : function(){
+		var notesView = this;
+		this.collection.each(function(note){
+			var noteView = new NoteView({model:note});
+			notesView.$el.append(noteView.render().el);
+		});
+	},
+	
+	addNote : function(){
+		view = new NotebookView({model:notebook});
+		this.$el.append(view.render().el);
+
+	},
+	
+	createNote : function(){
+		this.collection.create({content : "markdownContent"});
+	},
+	
+	showNotesPanel : function(){
+		$("#welcome").hide();
+		$("#create-note").show();
+	},
+	
+	showNoteEditor : function(){
+		modalView.show();
+	}
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var Notebook = Notebook || {};
 
 Notebook.note={

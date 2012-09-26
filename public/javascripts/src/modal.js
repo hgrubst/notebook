@@ -1,7 +1,13 @@
-var Notebook = Notebook || {};
+var ModalView = Backbone.View.extend({
 
-Notebook.modal = {
-	initialize : function() {
-		this.selectors = { noteModal : "#note-modal" };
-	}
-}
+	el: "#note-modal",
+
+	initialize : function(){
+		$("textarea", this.$el).markItUp(mySettings);
+//		this.$el("textarea").markItUp(mySettings);
+	},
+	
+    show : function(){
+    	this.$el.modal("show");
+    }
+});
