@@ -11,6 +11,7 @@ var NotelloView = Backbone.View.extend({
 			"createNotebookButton" : "#create-notebook-button",
 			"createNotebookDiv" : "#create-notebook", 
 			"createNotebookTitle" : "#create-notebook input", 
+			"notebookLinks" : "li a",
 		};
 		
 		
@@ -65,6 +66,15 @@ var NotelloView = Backbone.View.extend({
 			$(this.selectors["createNotebookTitle"]).val("");
 			$(this.selectors["createNotebookButton"]).show();
 		}
+	},
+	
+	clearFocus : function(){
+		$(this.selectors["notebookLinks"]).each(function(){
+			console.debug($(this).parent().prop("nodeName"));
+			if($(this).parent().prop("nodeName") == "STRONG"){
+				$(this).unwrap();
+			}
+		})
 	}
 	
 });
@@ -72,7 +82,7 @@ var NotelloView = Backbone.View.extend({
 
 
 $(document).ready(function(){
-	new NotelloView({el:'#notebooks',collection:new Notebooks()});
+	_notebooksView = new NotelloView({el:'#notebooks',collection:new Notebooks()});
 	notesView = new NotesView({el:'#content'});
 	modalView = new ModalView();
 });

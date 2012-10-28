@@ -10,7 +10,45 @@ var NoteCollection = Backbone.Collection.extend({
 
 //the view for a single note
 var NoteView = Backbone.View.extend({
+	tagName: "div",
 	
+	attributes: {
+		"class" : "well"
+	},
+	
+    events: {
+    	"dblclick" : "showNoteEditor",
+    	"click .icon-trash" : "deleteNote",
+    },	
+	
+    initialize: function(){
+    	this.bind("saveModal", this.updateNote, this);
+    	this.model.bind("change", this.render, this);
+    	this.model.bind('destroy', this.remove, this);
+    },    
+    
+	template: _.template('<i class="icon-trash" style="position:relative;left:100%;top:-15px"></i><%=note.contentAsHtml%>'),
+
+	render : function(){
+		this.$el.html(this.template({
+			note : this.model.toJSON()
+		}));
+		return this;
+	},
+
+	showNoteEditor : function(){
+		modalView.setView(this);
+		modalView.setContent(this.model.get("content"));
+		modalView.show();
+	},
+	
+	updateNote : function(){
+		this.model.save({"content" : modalView.getContent()}, {wait:true});
+	},
+	
+	deleteNote : function(){
+		this.model.destroy({wait: true});
+	}
 });
 
 //the view for a list of notes (eg all the notes of a notebook)
@@ -18,13 +56,17 @@ var NotesView = Backbone.View.extend({
 	
     events: {
     	"dblclick #create-note" : "showNoteEditor",
-        "click save"   : "createNote",//click on save button of markitup editor
     },
 	
+    initialize: function(){
+    	this.bind("saveModal", this.createNote, this);
+    },
+    
 	setNotes : function(notes){
 		this.collection = notes;
 		this.collection.bind("add", this.addNote, this);
 		this.collection.bind("reset", this.renderNotes, this);
+		modalView.setView(this);
 	},
 
 	renderNotes : function(){
@@ -35,23 +77,28 @@ var NotesView = Backbone.View.extend({
 		});
 	},
 	
-	addNote : function(){
-		view = new NotebookView({model:notebook});
+	addNote : function(note){
+		var view = new NoteView({model:note});
 		this.$el.append(view.render().el);
 
 	},
 	
 	createNote : function(){
-		this.collection.create({content : "markdownContent"});
+		this.collection.create({content : modalView.getContent()},{wait: true});
 	},
 	
 	showNotesPanel : function(){
 		$("#welcome").hide();
+		this.clear();
 		$("#create-note").show();
 	},
 	
 	showNoteEditor : function(){
 		modalView.show();
+	},
+	
+	clear : function(){
+		$("#create-note ~ div").remove();
 	}
 });
 

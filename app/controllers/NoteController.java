@@ -42,7 +42,7 @@ public class NoteController extends Controller{
 	public static Result create(String notebookId){
 		Notebook notebook = notebookRepository.findOne(notebookId);
 		
-		String markdown = request().body().asFormUrlEncoded().get("markdown")[0];
+		String markdown = request().body().asJson().get("content").asText();
 		
 		Note note = new Note();
 		note.setContent(markdown);
@@ -52,12 +52,16 @@ public class NoteController extends Controller{
 		notebookRepository.save(notebook);
 
 		log.info("Sucessfully added note '{}' to notebook '{}'", note.getId(), notebook.getId());
-		
-		return ok();
+
+		ObjectNode response = Json.newObject();
+		response.put("id", note.getId());
+		response.put("contentAsHtml", note.getContentAsHtml());
+
+		return ok(response);
 	}
 	
 	public static Result update(String noteId, String notebookId){
-		String markdown = request().body().asFormUrlEncoded().get("markdown")[0];
+		String markdown = request().body().asJson().get("content").asText();
 		
 		Note note = noteRepository.findOne(noteId);
 		note.setContent(markdown);
@@ -66,10 +70,14 @@ public class NoteController extends Controller{
 		
 		log.info("Sucessfully updated note '{}' with new content : '{}'", note.getId(), note.getContent());
 		
-		return ok();
+		ObjectNode response = Json.newObject();
+		response.put("contentAsHtml", note.getContentAsHtml());
+		
+		return ok(response);
 	}
 	
 	public static Result delete(String noteId, String notebookId){
+		noteRepository.delete(noteId);
 		return ok();		
 	}
 	
