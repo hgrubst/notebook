@@ -24,6 +24,7 @@ public class NotebookController extends Controller {
 
 	private static NotebookRepository notebookRepository = Spring
 			.getBeanOfType(NotebookRepository.class);
+	
 	private static NotebookService notebookService = Spring
 			.getBeanOfType(NotebookService.class);
 
@@ -47,18 +48,14 @@ public class NotebookController extends Controller {
 	}
 
 	public static Result create() {
-		
+
 		String title = request().body().asJson().get("title").asText();
+
+		Notebook notebook = notebookService.createNotebook(title, request().username());
 		
-		Notebook notebook = new Notebook();
-		notebook.setTitle(title);
-		notebook.setUserEmail(request().username());
-
-		notebookRepository.save(notebook);
-
 		ObjectNode response = Json.newObject();
 		response.put("id", notebook.getId());
-		
+
 		return ok(response);
 	}
 
@@ -70,10 +67,7 @@ public class NotebookController extends Controller {
 	public static Result update(String id) {
 		String title = request().body().asFormUrlEncoded().get("title")[0];
 
-		Notebook notebook = notebookRepository.findOne(id);
-		notebook.setTitle(title);
-
-		notebookRepository.save(notebook);
+		notebookService.updateTitle(id, title);
 
 		return ok();
 	}

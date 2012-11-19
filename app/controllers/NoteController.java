@@ -3,7 +3,6 @@ package controllers;
 import java.util.List;
 
 import models.Note;
-import models.Notebook;
 
 import org.codehaus.jackson.node.ObjectNode;
 import org.slf4j.Logger;
@@ -16,7 +15,7 @@ import play.mvc.Result;
 import play.mvc.Security;
 import play.mvc.With;
 import repositories.NoteRepository;
-import repositories.NotebookRepository;
+import service.NoteService;
 
 @Security.Authenticated(Secured.class)
 @With(ForceHttps.class)
@@ -24,14 +23,14 @@ public class NoteController extends Controller{
 
 	static Logger log = LoggerFactory.getLogger(NoteController.class);
 	
-	private static NotebookRepository notebookRepository = Spring.getBeanOfType(NotebookRepository.class);
 	private static NoteRepository noteRepository = Spring.getBeanOfType(NoteRepository.class);
+	private static NoteService noteService = Spring.getBeanOfType(NoteService.class);
 
 	public static Result list(String notebookId){
 		
 		//TODO: check that the notebook belongs to logged in user
 		
-		List<Note> notes = notebookRepository.findOne(notebookId).getNotes();
+		List<Note> notes = noteRepository.findByNotebookId(notebookId);
 		
 		ObjectNode notesJson = Json.newObject();
 		notesJson.put("notes", Json.toJson(notes));
@@ -40,18 +39,11 @@ public class NoteController extends Controller{
 	}
 	
 	public static Result create(String notebookId){
-		Notebook notebook = notebookRepository.findOne(notebookId);
-		
 		String markdown = request().body().asJson().get("content").asText();
 		
-		Note note = new Note();
-		note.setContent(markdown);
-		noteRepository.save(note);
-
-		notebook.addNote(note);
-		notebookRepository.save(notebook);
-
-		log.info("Sucessfully added note '{}' to notebook '{}'", note.getId(), notebook.getId());
+		Note note = noteService.createNote(notebookId, markdown);
+		
+		log.info("Sucessfully added note '{}' to notebook '{}'", note.getId(), notebookId);
 
 		ObjectNode response = Json.newObject();
 		response.put("id", note.getId());
@@ -63,10 +55,7 @@ public class NoteController extends Controller{
 	public static Result update(String noteId, String notebookId){
 		String markdown = request().body().asJson().get("content").asText();
 		
-		Note note = noteRepository.findOne(noteId);
-		note.setContent(markdown);
-		
-		noteRepository.save(note);
+		Note note = noteService.updateContent(noteId, markdown);
 		
 		log.info("Sucessfully updated note '{}' with new content : '{}'", note.getId(), note.getContent());
 		
@@ -78,6 +67,7 @@ public class NoteController extends Controller{
 	
 	public static Result delete(String noteId, String notebookId){
 		noteRepository.delete(noteId);
+		log.debug("Sucessfully deleted note '{}'", noteId);
 		return ok();		
 	}
 	
