@@ -1,21 +1,13 @@
 package repositories;
 
-import java.util.List;
-
 import models.Notebook;
-import models.User;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"file:conf/application-context.xml","file:conf/application-context-test.xml"})
-public class NotebookRepositoryTest {
+public class NotebookRepositoryTest extends BaseRepositoryTest{
 
 	@Autowired
 	NotebookRepository notebookRepository;
@@ -27,6 +19,8 @@ public class NotebookRepositoryTest {
 	
 	@Before
 	public void setup(){
+		mongoTemplate.dropCollection(Notebook.class);
+		
 		notebook = new Notebook();
 		notebook.setTitle("testNotebook1");
 	}

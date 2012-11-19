@@ -1,23 +1,21 @@
 package models;
 
-import org.springframework.data.annotation.Transient;
-
 import play.modules.spring.Spring;
+import repositories.NotebookRepository;
 import service.MarkdownService;
 
 
 
 public class Note extends AbstractAuditable{
 
-	@Transient
-	private MarkdownService markdownService = Spring.getBeanOfType(MarkdownService.class);
-	
 	private String id;
 
 	private String content;
 
 	private Integer position;
 
+	private String notebookId;
+	
 	public String getId() {
 		return id;
 	}
@@ -43,6 +41,18 @@ public class Note extends AbstractAuditable{
 	}
 
 	public String getContentAsHtml(){
-		return markdownService.getHtml(getContent());
+		return Spring.getBeanOfType(MarkdownService.class).getHtml(getContent());
+	}
+
+	public String getNotebookId() {
+		return notebookId;
+	}
+
+	public void setNotebookId(String notebookId) {
+		this.notebookId = notebookId;
+	}
+	
+	public Notebook getNotebook(){
+		return Spring.getBeanOfType(NotebookRepository.class).findOne(notebookId);
 	}
 }

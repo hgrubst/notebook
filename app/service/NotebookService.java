@@ -1,5 +1,8 @@
 package service;
 
+import java.util.List;
+
+import models.Note;
 import models.Notebook;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -17,15 +20,34 @@ public class NotebookService {
 
 	@Autowired
 	private NoteRepository noteRepository;
-	
-	public void delete(String notebookId){
+
+	public Notebook createNotebook(String title, String userEmail) {
+		Notebook notebook = new Notebook();
+		notebook.setTitle(title);
+		notebook.setUserEmail(userEmail);
+
+		notebookRepository.save(notebook);
+
+		return notebook;
+	}
+
+	public Notebook updateTitle(String notebookId, String title) {
+		//ensure notebook belongs to current user
+		
 		Notebook notebook = notebookRepository.findOne(notebookId);
-		
-		if(CollectionUtils.isNotEmpty(notebook.getNotes())){
-			noteRepository.delete(notebook.getNotes());
+		notebook.setTitle(title);
+		notebookRepository.save(notebook);
+
+		return notebook;
+	}
+
+	public void delete(String notebookId) {
+		List<Note> notes = noteRepository.findByNotebookId(notebookId);
+		if (CollectionUtils.isNotEmpty(notes)) {
+			noteRepository.delete(notes);
 		}
-		
+
 		notebookRepository.delete(notebookId);
 	}
-	
+
 }

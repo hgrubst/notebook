@@ -1,10 +1,11 @@
 package models;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+
+import play.modules.spring.Spring;
+import repositories.NoteRepository;
 
 
 @JsonIgnoreProperties("notes")
@@ -14,9 +15,6 @@ public class Notebook extends AbstractAuditable{
 
 	private String title;
 
-	@DBRef
-	private List<Note> notes;
-	
 	private String userEmail;
 	
 	public String getTitle() {
@@ -36,18 +34,7 @@ public class Notebook extends AbstractAuditable{
 	}
 
 	public List<Note> getNotes() {
-		return notes;
-	}
-
-	public void setNotes(List<Note> notes) {
-		this.notes = notes;
-	}
-
-	public void addNote(Note note){
-		if(notes == null){
-			notes = new ArrayList<Note>();
-		}
-		notes.add(note);
+		return Spring.getBeanOfType(NoteRepository.class).findByNotebookId(id);
 	}
 
 	public String getUserEmail() {
