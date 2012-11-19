@@ -28,31 +28,38 @@
 		<header class="navbar">
 		  <div class="navbar-inner">
 		    <div class="container">
-			    <a class="brand" href="#">
+			    <a class="brand" href="@routes.NotebookController.index">
 			  		Notebook
 				</a>             
 		    </div>
 		  </div>
-		</header>    
-		
-		<div id="sidebar" class="span4">
-			<div class="well">
-				<ul id="notebooks" class="nav nav-list">
-					<li class="nav-header">
-						Notebooks
-					</li>
-					
-					<li>
-						<button id="create-notebook-button" class="btn btn-small">Create notebook</button>
-						<div id="create-notebook" class="input-append" style="display:none">
-							<input class="input-medium">
-						</div>
-					</li>				
-				</ul>
-			</div>
+		</header>
+		<div class="ajax-loader-wrapper">
+			<div class="alert alert-info hide">...</div>
+			<div class="alert alert-error hide">An error has occurred. Please retry later.</div>
 		</div>
-		<div id="content" class="span8">
-	        @content
+	    <div class="container-fluid">
+	    	<div class="row-fluid">
+				<div id="sidebar" class="span2">
+					<div class="well">
+						<ul id="notebooks" class="nav nav-list">
+							<li class="nav-header">
+								Notebooks
+							</li>
+							
+							<li>
+								<button id="create-notebook-button" class="btn btn-small">Create notebook</button>
+								<div id="create-notebook" class="input-append" style="display:none">
+									<input class="input-medium">
+								</div>
+							</li>				
+						</ul>
+					</div>
+				</div>
+				<div id="content" class="span10">
+			        @content
+				</div>
+			</div>
 		</div>
 		<div class="modal hide" id="note-modal">
 			<div class="modal-body">

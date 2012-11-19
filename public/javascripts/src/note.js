@@ -18,6 +18,7 @@ var NoteView = Backbone.View.extend({
 	
     events: {
     	"dblclick" : "showNoteEditor",
+    	"click .icon-pencil" : "showNoteEditor",
     	"click .icon-trash" : "deleteNote",
     },	
 	
@@ -27,7 +28,7 @@ var NoteView = Backbone.View.extend({
     	this.model.bind('destroy', this.remove, this);
     },    
     
-	template: _.template('<i class="icon-trash" style="position:relative;left:100%;top:-15px"></i><%=note.contentAsHtml%>'),
+	template: _.template('<div class="btn-toolbar"><div class="btn-group"><a href="#" class="btn btn-mini"><i class="icon-pencil"></i></a><a href="#" class="btn btn-mini"><i class="icon-trash"></i></a></div></div><%=note.contentAsHtml%>'),
 
 	render : function(){
 		this.$el.html(this.template({
@@ -44,6 +45,7 @@ var NoteView = Backbone.View.extend({
 	
 	updateNote : function(){
 		this.model.save({"content" : modalView.getContent()}, {wait:true});
+		modalView.resetContent();
 	},
 	
 	deleteNote : function(){
@@ -64,13 +66,10 @@ var NotesView = Backbone.View.extend({
     
 	setNotes : function(notes){
 		this.collection = notes;
-		this.collection.bind("add", this.addNote, this);
-		this.collection.bind("reset", this.renderNotes, this);
 		modalView.setView(this);
 	},
 
 	renderNotes : function(){
-		var notesView = this;
 		this.collection.each(function(note){
 			var noteView = new NoteView({model:note});
 			notesView.$el.append(noteView.render().el);
@@ -85,6 +84,7 @@ var NotesView = Backbone.View.extend({
 	
 	createNote : function(){
 		this.collection.create({content : modalView.getContent()},{wait: true});
+		modalView.resetContent();
 	},
 	
 	showNotesPanel : function(){

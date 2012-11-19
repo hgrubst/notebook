@@ -1,7 +1,14 @@
 var Notebook = Backbone.Model.extend({
 	initialize: function(){
 		this.notes=new NoteCollection();
-		this.notes.url="/notebooks/" + this.id + "/notes";
+		
+		this.notes.bind("add", notesView.addNote, notesView);
+		this.notes.bind("reset", notesView.renderNotes, notesView);
+		
+		var that = this;
+		this.notes.url= function(){
+			return "/notebooks/" + that.id + "/notes";
+		}
 	}
 });
 
@@ -50,7 +57,8 @@ var NotebookView = Backbone.View.extend({
 	},
 	
 	focus : function(){
-		$("a", this.$el).wrap("<strong/>");
+		//$("a", this.$el).wrap("<strong/>");
+		this.$el.addClass("active");
 	}
 });
 

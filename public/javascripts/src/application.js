@@ -22,7 +22,6 @@ var NotelloView = Backbone.View.extend({
 	},
 
 	addNotebook : function(notebook){
-		alert(JSON.stringify(notebook));
 		view = new NotebookView({model:notebook});
 		this.$el.append(view.render().el);
 		this.editInPlaceOff();
@@ -39,7 +38,7 @@ var NotelloView = Backbone.View.extend({
 	updateOnKeypress : function(event){
 		switch (event.which) {
 		case 13://enter
-			this.collection.create({title:$(this.selectors["createNotebookTitle"]).val()});
+			this.collection.create({title:$(this.selectors["createNotebookTitle"]).val()},{wait:true});
 			break;
 		case 27://escape
 			break;
@@ -69,11 +68,8 @@ var NotelloView = Backbone.View.extend({
 	},
 	
 	clearFocus : function(){
-		$(this.selectors["notebookLinks"]).each(function(){
-			console.debug($(this).parent().prop("nodeName"));
-			if($(this).parent().prop("nodeName") == "STRONG"){
-				$(this).unwrap();
-			}
+		$("li").each(function(){
+			$(this).removeClass("active");
 		})
 	}
 	
@@ -85,6 +81,7 @@ $(document).ready(function(){
 	_notebooksView = new NotelloView({el:'#notebooks',collection:new Notebooks()});
 	notesView = new NotesView({el:'#content'});
 	modalView = new ModalView();
+	setupAjaxIndicators();
 });
 
 var AppRouter = Backbone.Router.extend({
@@ -96,3 +93,27 @@ var AppRouter = Backbone.Router.extend({
 var app_router = new AppRouter;
 // Start Backbone history a neccesary step for bookmarkable URL's
 Backbone.history.start({pushState: true});
+
+var _ajaxTimeout;
+function setupAjaxIndicators(){
+	var loadIndicator = $(".alert-info").first();
+	var errorIndicator = $(".alert-error").first();
+	
+	loadIndicator.ajaxStart(function(){
+		if(_ajaxTimeout){clearTimeout(_ajaxTimeout);}
+		_ajaxTimeout = setTimeout(function(){
+			loadIndicator.show();
+		}, 2000);
+	});
+	
+	loadIndicator.ajaxStop(function(){
+		if(_ajaxTimeout){clearTimeout(_ajaxTimeout);}
+		$(this).hide();
+	});
+	
+	errorIndicator.ajaxError(function(){
+		errorIndicator.show();
+		errorIndicator.delay(5000).fadeOut();
+	})
+
+}

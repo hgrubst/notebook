@@ -28,5 +28,9 @@ var ModalView = Backbone.View.extend({
 	
 	getContent: function(){
 		return $("textarea", this.$el).val();
+	},
+	
+	resetContent: function(){
+		$("textarea", this.$el).val("");
 	}
 });
