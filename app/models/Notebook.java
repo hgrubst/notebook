@@ -3,6 +3,7 @@ package models;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 import play.modules.spring.Spring;
 import repositories.NoteRepository;
@@ -15,6 +16,7 @@ public class Notebook extends AbstractAuditable{
 
 	private String title;
 
+	@Indexed
 	private String userEmail;
 	
 	public String getTitle() {

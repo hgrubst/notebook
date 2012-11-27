@@ -1,5 +1,7 @@
 package models;
 
+import org.springframework.data.mongodb.core.index.Indexed;
+
 import play.modules.spring.Spring;
 import repositories.NotebookRepository;
 import service.MarkdownService;
@@ -14,6 +16,7 @@ public class Note extends AbstractAuditable{
 
 	private Integer position;
 
+	@Indexed
 	private String notebookId;
 	
 	public String getId() {
