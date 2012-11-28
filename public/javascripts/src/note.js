@@ -48,8 +48,12 @@ var NoteView = Backbone.View.extend({
 		modalView.resetContent();
 	},
 	
-	deleteNote : function(){
-		this.model.destroy({wait: true});
+	deleteNote : function(e){
+		if(confirm("This will delete this note. Are you sure you want to continue?")){
+			this.model.destroy({wait: true});
+		}else{
+			e.stopImmediatePropagation();
+		}
 	}
 });
 
@@ -93,6 +97,12 @@ var NotesView = Backbone.View.extend({
 		$("#create-note").show();
 	},
 	
+	showWelcomePanel : function(){
+		$("#welcome").show();
+		this.clear();
+		$("#create-note").hide();
+	},
+
 	showNoteEditor : function(){
 		modalView.show();
 	},

@@ -42,8 +42,17 @@ var NotebookView = Backbone.View.extend({
 		return this;
 	},
 	
-	deleteNotebook : function(){
-		this.model.destroy({wait: true});
+	deleteNotebook : function(e){
+		//prevent default to avoid the anchor from trying to go to link 
+		e.preventDefault();
+		if(confirm("This will delete the notebook and all notes contained. Are you sure you want to continue?")){
+			this.model.destroy({wait: true});
+			if(this.isFocus()){
+				notesView.showWelcomePanel();
+			}
+		}
+		//dont propagate to avoid displaying notes
+		e.stopPropagation();
 	},
 	
 	displayNotes : function(e){
@@ -57,8 +66,12 @@ var NotebookView = Backbone.View.extend({
 	},
 	
 	focus : function(){
-		//$("a", this.$el).wrap("<strong/>");
 		this.$el.addClass("active");
+	},
+
+	isFocus : function(){
+		return this.$el.hasClass("active");
 	}
+	
 });
 
