@@ -13,13 +13,14 @@ var NoteView = Backbone.View.extend({
 	tagName: "div",
 	
 	attributes: {
-		"class" : "well"
 	},
 	
     events: {
     	"dblclick" : "showNoteEditor",
     	"click .icon-pencil" : "showNoteEditor",
     	"click .icon-trash" : "deleteNote",
+    	"click .tab-pane a.btn:first" : "displayViewPane",
+    	"click .tab-pane a.btn-primary" : "updateNote",
     },	
 	
     initialize: function(){
@@ -28,12 +29,37 @@ var NoteView = Backbone.View.extend({
     	this.model.bind('destroy', this.remove, this);
     },    
     
-	template: _.template('<div class="btn-toolbar"><div class="btn-group"><a href="#" class="btn btn-mini"><i class="icon-pencil"></i></a><a href="#" class="btn btn-mini"><i class="icon-trash"></i></a></div></div><%=note.contentAsHtml%>'),
-
+	template: _.template( 
+			'<div class="tabbable">' + 
+				'<ul class="nav nav-tabs">' + 
+					'<li class="active"><a href="#note-<%=note.id%>-view" data-toggle="tab">View</a></li>' + 
+					'<li><a href="#note-<%=note.id%>-edit" data-toggle="tab">Edit</a></li>' + 
+				'</ul>' + 
+				'<div class="tab-content">' + 
+					'<div class="tab-pane active" id="note-<%=note.id%>-view">' + 
+						'<%=note.contentAsHtml%>' + 
+					'</div>' + 
+					'<div class="tab-pane" id="note-<%=note.id%>-edit">' + 
+						'<textarea><%=note.content%></textarea>' +
+						'<div class="btn-toolbar"> ' + 
+							'<div class="btn-group">' + 
+								'<a href="#" class="btn">Cancel</a>' + 
+							'</div>' + 
+							'<div class="btn-group">' + 
+								'<a href="#" class="btn btn-primary">Save</a>' +
+							'</div>' + 
+						'</div>' +
+					'</div>' + 
+				'</div>' +
+			'</div>'), 
+			
 	render : function(){
 		this.$el.html(this.template({
 			note : this.model.toJSON()
 		}));
+		if(!$("textarea", this.$el).hasClass("markItUpEditor")){
+			$("textarea", this.$el).markItUp(mySettings);
+		}
 		return this;
 	},
 
@@ -44,8 +70,7 @@ var NoteView = Backbone.View.extend({
 	},
 	
 	updateNote : function(){
-		this.model.save({"content" : modalView.getContent()}, {wait:true});
-		modalView.resetContent();
+		this.model.save({"content" : $("textarea", this.$el).val()}, {wait:true});
 	},
 	
 	deleteNote : function(e){
@@ -54,6 +79,10 @@ var NoteView = Backbone.View.extend({
 		}else{
 			e.stopImmediatePropagation();
 		}
+	}, 
+	
+	displayViewPane : function(){
+		$("li:first a", this.$el).click();
 	}
 });
 

@@ -4,6 +4,7 @@ var NotelloView = Backbone.View.extend({
         "click #create-notebook-button"   : "editInPlaceOn",
         "blur #create-notebook input"   : "editInPlaceOff",
         "keyup #create-notebook input"  : "updateOnKeypress",
+        "mousedown #create-notebook button" : "createNotebook",
     },
 	
 	initialize : function(){
@@ -34,14 +35,25 @@ var NotelloView = Backbone.View.extend({
 			notebooksView.$el.append(notebookView.render().el);
 		});
 	},
-	
+
+	createNotebook : function(event){
+		if(event && event.type == 'mousedown'){
+			if($("#create-notebook button").get()[0] == event.target){
+				if($(this.selectors["createNotebookTitle"]).val() != ""){
+					this.collection.create({title:$(this.selectors["createNotebookTitle"]).val()},{wait:true});
+				}
+				event.stopPropagation();
+			}
+		}
+		
+	},
+
 	updateOnKeypress : function(event){
 		switch (event.which) {
 		case 13://enter
-			this.collection.create({title:$(this.selectors["createNotebookTitle"]).val()},{wait:true});
-			break;
+			this.createNotebook();
 		case 27://escape
-			break;
+			this.editInPlaceOff();
 		default:
 			break;
 		}

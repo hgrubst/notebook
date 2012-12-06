@@ -61,11 +61,11 @@ var NotebookView = Backbone.View.extend({
 		notesView.showNotesPanel();
 		notesView.setNotes(this.model.notes);
 		notesView.collection.fetch();
-		_notebooksView.clearFocus();
 		this.focus();
 	},
 	
 	focus : function(){
+		_notebooksView.clearFocus();
 		this.$el.addClass("active");
 	},
 
