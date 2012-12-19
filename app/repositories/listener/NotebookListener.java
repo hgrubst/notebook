@@ -7,7 +7,6 @@ import models.Note;
 import models.Notebook;
 
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
-import org.springframework.stereotype.Component;
 
 import com.mongodb.DBObject;
 

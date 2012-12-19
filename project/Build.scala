@@ -9,7 +9,7 @@ object ApplicationBuild extends Build {
 
     val appDependencies = Seq(
     	"commons-collections" % "commons-collections" % "3.2.1",
-    	"org.springframework.data" % "spring-data-mongodb" % "1.0.2.RELEASE",
+    	"org.springframework.data" % "spring-data-mongodb" % "1.1.1.RELEASE",
     	"play" %% "spring" % "2.0",
     	"org.springframework" % "spring-core" % "3.1.2.RELEASE",
     	"org.springframework" % "spring-context" % "3.1.2.RELEASE",
@@ -33,7 +33,7 @@ object ApplicationBuild extends Build {
       resolvers += "TAMU Release Repository" at "https://maven.library.tamu.edu/content/repositories/releases/",
       
       //for markdownj
-      resolvers += "Sonatype scala tools" at "https://oss.sonatype.org/content/groups/scala-tools/"       
+      resolvers += "Sonatype scala tools" at "https://oss.sonatype.org/content/groups/scala-tools/"
     )
 
 }

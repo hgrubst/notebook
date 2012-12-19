@@ -1,6 +1,6 @@
 package controllers;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import play.Play;
 import play.mvc.Action;
