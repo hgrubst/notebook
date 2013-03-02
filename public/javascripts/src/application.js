@@ -15,6 +15,7 @@ var NotelloView = Backbone.View.extend({
 			"notebookLinks" : "li a",
 		};
 		
+		this.subViews = {};
 		
 		this.collection.bind("add", this.addNotebook, this);
 		this.collection.bind("reset", this.renderNotebooks, this);
@@ -29,18 +30,20 @@ var NotelloView = Backbone.View.extend({
 	},
 
 	renderNotebooks : function(){
-		var notebooksView = this;
 		this.collection.each(function(notebook){
 			var notebookView = new NotebookView({model:notebook});
-			notebooksView.$el.append(notebookView.render().el);
+			_notebooksView.subViews[notebook.id]=notebookView;
+			_notebooksView.$el.append(notebookView.render().el);
 		});
+		// Start Backbone history a neccesary step for bookmarkable URL's
+		Backbone.history.start({pushState: true});
 	},
 
 	createNotebook : function(event){
 		if(event && event.type == 'mousedown'){
 			if($("#create-notebook button").get()[0] == event.target){
 				if($(this.selectors["createNotebookTitle"]).val() != ""){
-					this.collection.create({title:$(this.selectors["createNotebookTitle"]).val()},{wait:true});
+					this.collection.create({title:$(this.selectors["createNotebookTitle"]).val()});
 				}
 				event.stopPropagation();
 			}
@@ -83,6 +86,10 @@ var NotelloView = Backbone.View.extend({
 		$("li").each(function(){
 			$(this).removeClass("active");
 		})
+	},
+	
+	getSubViews : function(){
+		return this.subViews;
 	}
 	
 });
@@ -91,20 +98,29 @@ var NotelloView = Backbone.View.extend({
 
 $(document).ready(function(){
 	_notebooksView = new NotelloView({el:'#notebooks',collection:new Notebooks()});
-	notesView = new NotesView({el:'#content'});
-	modalView = new ModalView();
+	_notesView = new NotesView({el:'#content'});
+	_modalView = new ModalView();
 	setupAjaxIndicators();
+
+	// Instantiate the router
+	_router = new AppRouter();
 });
 
 var AppRouter = Backbone.Router.extend({
     routes: {
+    	"notebooks/:id" : "showNotebook",
         "*actions": "defaultRoute" // Backbone will try match the route above first
     },
+    
+    showNotebook: function(id){
+    	var view = _notebooksView.getSubViews()[id];
+		_notesView.showNotesPanel();
+		_notesView.setNotes(view.model.notes);
+		_notesView.collection.fetch();
+		view.focus();
+    }
+    
 });
-// Instantiate the router
-var app_router = new AppRouter;
-// Start Backbone history a neccesary step for bookmarkable URL's
-Backbone.history.start({pushState: true});
 
 var _ajaxTimeout;
 function setupAjaxIndicators(){

@@ -16,7 +16,7 @@ var NoteView = Backbone.View.extend({
 	},
 	
     events: {
-    	"dblclick" : "showNoteEditor",
+    	"dblclick #create-note" : "showNoteEditor",
     	"click .icon-pencil" : "showNoteEditor",
     	"click .icon-trash" : "deleteNote",
     	"click .tab-pane a.btn:first" : "displayViewPane",
@@ -64,18 +64,18 @@ var NoteView = Backbone.View.extend({
 	},
 
 	showNoteEditor : function(){
-		modalView.setView(this);
-		modalView.setContent(this.model.get("content"));
-		modalView.show();
+		_modalView.setView(this);
+		_modalView.setContent(this.model.get("content"));
+		_modalView.show();
 	},
 	
 	updateNote : function(){
-		this.model.save({"content" : $("textarea", this.$el).val()}, {wait:true});
+		this.model.save({"content" : $("textarea", this.$el).val()});
 	},
 	
 	deleteNote : function(e){
 		if(confirm("This will delete this note. Are you sure you want to continue?")){
-			this.model.destroy({wait: true});
+			this.model.destroy();
 		}else{
 			e.stopImmediatePropagation();
 		}
@@ -99,13 +99,13 @@ var NotesView = Backbone.View.extend({
     
 	setNotes : function(notes){
 		this.collection = notes;
-		modalView.setView(this);
+		_modalView.setView(this);
 	},
 
 	renderNotes : function(){
 		this.collection.each(function(note){
 			var noteView = new NoteView({model:note});
-			notesView.$el.append(noteView.render().el);
+			_notesView.$el.append(noteView.render().el);
 		});
 	},
 	
@@ -116,8 +116,8 @@ var NotesView = Backbone.View.extend({
 	},
 	
 	createNote : function(){
-		this.collection.create({content : modalView.getContent()},{wait: true});
-		modalView.resetContent();
+		this.collection.create({content : _modalView.getContent()});
+		_modalView.resetContent();
 	},
 	
 	showNotesPanel : function(){
@@ -133,7 +133,7 @@ var NotesView = Backbone.View.extend({
 	},
 
 	showNoteEditor : function(){
-		modalView.show();
+		_modalView.show();
 	},
 	
 	clear : function(){
