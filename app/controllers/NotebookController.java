@@ -38,10 +38,6 @@ public class NotebookController extends Controller {
 		List<Notebook> notebooks = (List<Notebook>) notebookRepository
 				.findByUserEmail(request().username());
 
-		if(RequestUtil.isNotAjaxRequest(request())){
-			redirect(routes.NotebookController.index());
-		}
-		
 		log.debug("Found {} notebooks for user  {}", notebooks.size(),
 				request().username());
 
@@ -74,9 +70,5 @@ public class NotebookController extends Controller {
 		notebookService.updateTitle(id, title);
 
 		return ok();
-	}
-	
-	public static Result show(String id){
-		return index();
 	}
 }

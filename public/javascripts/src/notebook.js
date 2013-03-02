@@ -2,8 +2,8 @@ var Notebook = Backbone.Model.extend({
 	initialize: function(){
 		this.notes=new NoteCollection();
 		
-		this.notes.bind("add", _notesView.addNote, _notesView);
-		this.notes.bind("reset", _notesView.renderNotes, _notesView);
+		this.notes.bind("add", notesView.addNote, notesView);
+		this.notes.bind("reset", notesView.renderNotes, notesView);
 		
 		var that = this;
 		this.notes.url= function(){
@@ -46,9 +46,9 @@ var NotebookView = Backbone.View.extend({
 		//prevent default to avoid the anchor from trying to go to link 
 		e.preventDefault();
 		if(confirm("This will delete the notebook and all notes contained. Are you sure you want to continue?")){
-			this.model.destroy();
+			this.model.destroy({wait: true});
 			if(this.isFocus()){
-				_notesView.showWelcomePanel();
+				notesView.showWelcomePanel();
 			}
 		}
 		//dont propagate to avoid displaying notes
@@ -57,7 +57,11 @@ var NotebookView = Backbone.View.extend({
 	
 	displayNotes : function(e){
 		e.preventDefault();
-		_router.navigate("notebooks/" + this.model.id, {trigger:true});
+		app_router.navigate("notebooks/" + this.model.id);
+		notesView.showNotesPanel();
+		notesView.setNotes(this.model.notes);
+		notesView.collection.fetch();
+		this.focus();
 	},
 	
 	focus : function(){

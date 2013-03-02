@@ -16,7 +16,6 @@ GET     /logout                     controllers.Application.logout()
 #Notebooks
 GET     /notebooks                  controllers.NotebookController.list()
 POST	/notebooks					controllers.NotebookController.create()
-GET     /notebooks/:id       		controllers.NotebookController.show(id:String)
 DELETE  /notebooks/:id       		controllers.NotebookController.delete(id:String)
 PUT     /notebooks/:id     			controllers.NotebookController.update(id:String)
 
