@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html ng-app>
     <head>
         <title>@title</title>
         <meta name="viewport" content="width=device-width">
@@ -14,17 +14,16 @@
         <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("javascripts/lib/markitup/sets/markdown/style.css")">
         <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
         
-        <script type="text/javascript" src="@routes.Assets.at("javascripts/lib/jquery-1.7.2.min.js")" ></script>
-        <script type="text/javascript" src="@routes.Assets.at("javascripts/lib/underscore.js")"></script>
-        <script type="text/javascript" src="@routes.Assets.at("javascripts/lib/backbone.js")"></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type="text/javascript" src="@routes.Application.javascriptRoutes"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/src/notebook.js")"></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js" ></script>
         <script type="text/javascript" src="@routes.Assets.at("javascripts/lib/bootstrap.min.js")"></script>
         <script type="text/javascript" src="@routes.Assets.at("javascripts/lib/markitup/jquery.markitup.js")"></script>
         <script type="text/javascript" src="@routes.Assets.at("javascripts/lib/markitup/sets/markdown/set.js")"></script>
-        <script type="text/javascript" src="@routes.Assets.at("javascripts/src/notebook.js")"></script>
-        <script type="text/javascript" src="@routes.Assets.at("javascripts/src/note.js")"></script>
-        <script type="text/javascript" src="@routes.Assets.at("javascripts/src/modal.js")"></script>
-        <script type="text/javascript" src="@routes.Assets.at("javascripts/src/application.js")"></script>
-        <script type="text/javascript" src="@routes.Application.javascriptRoutes"></script>
+<!--         <script type="text/javascript" src="@routes.Assets.at("javascripts/src/note.js")"></script> -->
+<!--         <script type="text/javascript" src="@routes.Assets.at("javascripts/src/modal.js")"></script> -->
+<!--         <script type="text/javascript" src="@routes.Assets.at("javascripts/src/application.js")"></script> -->
     </head>
     <body>      
 		<header class="navbar">
@@ -55,30 +54,25 @@
 		
 	    <div class="container-fluid">
 	    	<div class="row-fluid">
-				<div id="sidebar" class="span2">
+				<div id="sidebar" class="span3" ng-controller="NotebookCtrl">
 					<div class="well">
 						<ul id="notebooks" class="nav nav-list">
-							<li class="nav-header">
-								Notebooks
-							</li>
-							
+							<li class="nav-header">Notebooks</li>
 							<li>
-								<button id="create-notebook-button" class="btn btn-small">Create notebook</button>
-								
-								<div id="create-notebook" class="input-append" style="display:none">
-								  <input class="span10" id="appendedInputButton" type="text" required>
-								  <button class="btn" type="button">OK</button>
-								</div>								
-								
-<!-- 								<div id="create-notebook" style="display:none"> -->
-<!-- 									<input class="input-small"> -->
-<!-- 									<button type="button" class="btn-small btn">OK</button> -->
-<!-- 								</div> -->
-							</li>				
+								<form>
+									<div class="input-append">
+										<input type="text" class="input-block-level" style="width:90%" ng-model="notebook" placeholder="Filter or add..." required/>
+									  	<button type="submit" class="btn btn-primary" ng-click="create()"><i class="icon-plus icon-white"></i></button>
+									</div>								
+								</form>							
+							</li>	
+							<li ng-repeat="notebook in notebooks | filter:notebook" ng-class="{true: 'active', false: ''}[$index == selectedIndex]">
+								<a href="/notebooks/{{notebook.id}}" ng-click="select($event,$index)">{{notebook.title}} <i class="icon-trash pull-right" ng-click="delete($event, $index)"></i></a>
+							</li>
 						</ul>
 					</div>
 				</div>
-				<div id="content" class="span10">
+				<div id="content" class="span9">
 					<div id="welcome">
 						Welcome to Notebook!
 					</div>

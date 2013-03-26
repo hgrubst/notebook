@@ -4,7 +4,6 @@ import java.util.List;
 
 import models.Notebook;
 
-import org.codehaus.jackson.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,22 +44,14 @@ public class NotebookController extends Controller {
 		log.debug("Found {} notebooks for user  {}", notebooks.size(),
 				request().username());
 
-		ObjectNode notebooksJson = Json.newObject();
-		notebooksJson.put("notebooks", Json.toJson(notebooks));
 
-		return ok(notebooksJson);
+		return ok(Json.toJson(notebooks));
 	}
 
-	public static Result create() {
-
-		String title = request().body().asJson().get("title").asText();
-
+	public static Result create(String title) {
 		Notebook notebook = notebookService.createNotebook(title, request().username());
 		
-		ObjectNode response = Json.newObject();
-		response.put("id", notebook.getId());
-
-		return ok(response);
+		return ok(Json.toJson(notebook));
 	}
 
 	public static Result delete(String id) {
