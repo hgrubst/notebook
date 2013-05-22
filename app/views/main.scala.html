@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 
-<html ng-app>
+<html ng-app="notello">
     <head>
         <title>@title</title>
         <meta name="viewport" content="width=device-width">
@@ -15,18 +15,16 @@
         <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
         
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js" ></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular-sanitize.min.js" ></script> 
         <script type="text/javascript" src="@routes.Application.javascriptRoutes"></script>
         <script type="text/javascript" src="@routes.Assets.at("javascripts/src/notebook.js")"></script>
-        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js" ></script>
         <script type="text/javascript" src="@routes.Assets.at("javascripts/lib/bootstrap.min.js")"></script>
         <script type="text/javascript" src="@routes.Assets.at("javascripts/lib/markitup/jquery.markitup.js")"></script>
         <script type="text/javascript" src="@routes.Assets.at("javascripts/lib/markitup/sets/markdown/set.js")"></script>
-<!--         <script type="text/javascript" src="@routes.Assets.at("javascripts/src/note.js")"></script> -->
-<!--         <script type="text/javascript" src="@routes.Assets.at("javascripts/src/modal.js")"></script> -->
-<!--         <script type="text/javascript" src="@routes.Assets.at("javascripts/src/application.js")"></script> -->
     </head>
     <body>      
-		<header class="navbar">
+		<header class="navbar navbar-inverse">
 		  <div class="navbar-inner">
 		    <div class="container">
 			    <a class="brand" href="@routes.NotebookController.index">
@@ -39,7 +37,7 @@
 	      					<b class="caret"></b>
     					</a>
 					    <ul class="dropdown-menu">
-					      <li><a href="@routes.Application.logout">Sign out</a></li>
+					      <li><a href="@routes.Application.logout" target="_self">Sign out</a></li>
 					    </ul>
 				  	</li>
 				</ul>             
@@ -66,32 +64,55 @@
 									</div>								
 								</form>							
 							</li>	
-							<li ng-repeat="notebook in notebooks | filter:notebook" ng-class="{true: 'active', false: ''}[$index == selectedIndex]">
+							<li ng-repeat="notebook in notebooks | filter:notebook" ng-class="{active : $index == selectedIndex}">
 								<a href="/notebooks/{{notebook.id}}" ng-click="select($event,$index)">{{notebook.title}} <i class="icon-trash pull-right" ng-click="delete($event, $index)"></i></a>
 							</li>
 						</ul>
 					</div>
 				</div>
-				<div id="content" class="span9">
+				<div id="content" class="span9" ng-view>
 					<div id="welcome">
 						Welcome to Notebook!
-					</div>
-					
-					<div id="create-note" class="hide">
-						<div class="well well-small">Double click to create</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		
-		<div class="modal hide" id="note-modal">
-			<div class="modal-body">
-				<textarea>put your text here</textarea>
+		<script type="text/ng-template" id="/noteList.html">
+			<div ng-controller="AddNoteCtrl">
+				<button class="btn btn-small pull-right" ng-click="hidden=false">Add note  <i class="icon-plus-sign"></i></button>
+				
+				<div id="addNote" ng-hide="hidden">
+					<textarea markitup ng-model="content"></textarea>
+					<div>
+						<a href="#" class="btn" ng-click="hidden=true">Close</a>
+				    	<a href="#" class="btn btn-primary" ng-click="save()">Save changes</a>
+				    </div>
+				</div>
 			</div>
-			<div class="modal-footer">
-				<a href="#" class="btn" data-dismiss="modal">Close</a>
-		    	<a href="#" class="btn btn-primary" data-dismiss="modal">Save changes</a>
-		    </div>
-		</div>		
+
+			<div ng-repeat="note in notes" class="tabbable" id="note-{{note.id}}">
+				<ul class="nav nav-tabs">
+					<li ng-class="{active:!note.mode || note.mode == 'view'}" ng-click="note.mode='view'"><a>View</a></li>
+					<li ng-class="{active:note.mode == 'edit'}" ng-click="note.mode='edit'"><a>Edit</a></li>
+					<li><a href="/notebooks/{{notebookId}}/notes/{{note.id}}" target="_self" ng-click="delete($event, $index)">Delete</a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane" ng-class="{active:!note.mode || note.mode == 'view'}" ng-bind-html="note.contentAsHtml">
+						{{note.contentAsHtml}}
+					</div>
+					<div class="tab-pane" ng-class="{active:note.mode == 'edit'}">
+						<textarea markitup>{{note.content}}</textarea>
+						<div class="btn-toolbar">
+							<div class="btn-group">
+								<a href="#" class="btn" ng-click="cancel(note)">Cancel</a>
+							</div>
+							<div class="btn-group">
+								<a href="#" class="btn btn-primary" ng-click="save(note, $index)">Save</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</script>
     </body>
 </html>

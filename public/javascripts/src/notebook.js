@@ -1,3 +1,19 @@
+var notello = angular.module('notello',['ngSanitize']);
+
+notello.config(function($locationProvider, $routeProvider) {
+	$locationProvider.html5Mode(true).hashPrefix('!');
+    $routeProvider.
+    	when('/notebooks/:notebookId', {controller:NoteCtrl, templateUrl:'/noteList.html'});
+});		
+
+notello.directive("markitup", function(){
+	return function(scope, element){
+		if($(element).find(".markitup").length == 0){
+			$(element).markItUp(mySettings);
+		}
+	}
+})
+
 function NotebookCtrl($scope, $http) {
 	$scope.selectedIndex = -1;
 	
@@ -20,7 +36,7 @@ function NotebookCtrl($scope, $http) {
 		jsRoutes.controllers.NotebookController.create($scope.notebook).ajax({
 			success : function(data){
 				$scope.notebooks.push(data);
-				$scope.$apply()
+				$scope.$apply();
 			},
 		});
 	}
@@ -32,76 +48,61 @@ function NotebookCtrl($scope, $http) {
 
 }
 
-//var Notebook = Backbone.Model.extend({
-//	initialize: function(){
-//		this.notes=new NoteCollection();
-//		
-//		this.notes.bind("add", _notesView.addNote, _notesView);
-//		this.notes.bind("reset", _notesView.renderNotes, _notesView);
-//		
-//		var that = this;
-//		this.notes.url= function(){
-//			return "/notebooks/" + that.id + "/notes";
-//		}
-//	}
-//});
-//
-//var Notebooks = Backbone.Collection.extend({
-//	model : Notebook,
-//	url : "/notebooks",
-//    parse: function(response){
-//        return response.notebooks;
-//    }
-//});
-//
-//var NotebookView = Backbone.View.extend({
-//	
-//	tagName: "li",
-//	
-//	template: _.template('<a href="/notebooks/<%=notebook.id%>"><%= notebook.title %> <i class="icon-trash"></i></a>'),
-//	
-//    events: {
-//        "click i"   : "deleteNotebook",
-//        "click a" : "displayNotes"
-//    },
-//    
-//    initialize: function() {
-//        this.model.bind('destroy', this.remove, this);
-//    },
-//	
-//	render : function(){
-//		this.$el.html(this.template({
-//			notebook : this.model.toJSON()
-//		}));
-//		return this;
-//	},
-//	
-//	deleteNotebook : function(e){
-//		//prevent default to avoid the anchor from trying to go to link 
-//		e.preventDefault();
-//		if(confirm("This will delete the notebook and all notes contained. Are you sure you want to continue?")){
-//			this.model.destroy();
-//			if(this.isFocus()){
-//				_notesView.showWelcomePanel();
-//			}
-//		}
-//		//dont propagate to avoid displaying notes
-//		e.stopPropagation();
-//	},
-//	
-//	displayNotes : function(e){
-//		e.preventDefault();
-//		_router.navigate("notebooks/" + this.model.id, {trigger:true});
-//	},
-//	
-//	focus : function(){
-//		_notebooksView.clearFocus();
-//		this.$el.addClass("active");
-//	},
-//
-//	isFocus : function(){
-//		return this.$el.hasClass("active");
-//	}
-//	
-//});
+function NoteCtrl($scope, $http, $routeParams){
+	$scope.notebookId = $routeParams.notebookId;
+	
+	$http.get(jsRoutes.controllers.NoteController.list($routeParams.notebookId).url).success(function (data){
+		$scope.notes = data;
+	});
+
+	$scope.cancel = function(note){
+		note.mode='view';
+		$("#note-" + note.id).find("textarea").val(note.content);//could not find out how to cancel user changes without explicitly reseting the value in jquery
+	}
+	
+	$scope.save = function(note, index){
+		//markitup messes with angular model so do jquery here
+		var updatedContent = $("#note-" + note.id).find("textarea").val();
+		jsRoutes.controllers.NoteController.update(note.id, note.notebook.id).ajax({
+			data : {"content" : updatedContent},
+			success : function(data){
+				$scope.notes[index] = data;
+				$scope.$apply();
+			},
+		});
+		note.mode="view";
+	}
+	
+	$scope.delete = function(event, index){
+		event.preventDefault();
+		
+		if(confirm("Are you sure you want to delete this note?")){
+			var note = $scope.notes[index];
+			$http.delete(jsRoutes.controllers.NoteController.delete(note.id,$scope.notebookId).url).success(function (data){
+				$scope.notes.splice(index,1);	
+			});
+		}
+	}
+
+}
+
+function AddNoteCtrl($scope, $http, $routeParams){
+	var addNoteDiv = $("div#addNote");
+	
+	$scope.hidden=true;
+	
+	$scope.save = function(){
+		jsRoutes.controllers.NoteController.create($routeParams.notebookId).ajax({
+			//markitup messes with angular model so do jquery here
+			data : {"content" : addNoteDiv.find("textarea").val()},
+			success : function(data){
+				$scope.notes.push(data);//scope inherits from NoteCtrl scope
+				$scope.hidden=true;
+				$scope.content='';
+				$scope.$apply();
+			},
+		});
+	}
+
+}
 

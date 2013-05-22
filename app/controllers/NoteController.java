@@ -4,7 +4,6 @@ import java.util.List;
 
 import models.Note;
 
-import org.codehaus.jackson.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,37 +31,27 @@ public class NoteController extends Controller{
 		
 		List<Note> notes = noteRepository.findByNotebookId(notebookId);
 		
-		ObjectNode notesJson = Json.newObject();
-		notesJson.put("notes", Json.toJson(notes));
-
-		return ok(notesJson);
+		return ok(Json.toJson(notes));
 	}
 	
 	public static Result create(String notebookId){
-		String markdown = request().body().asJson().get("content").asText();
+		String markdown = request().body().asFormUrlEncoded().get("content")[0];
 		
 		Note note = noteService.createNote(notebookId, markdown);
 		
 		log.info("Sucessfully added note '{}' to notebook '{}'", note.getId(), notebookId);
 
-		ObjectNode response = Json.newObject();
-		response.put("id", note.getId());
-		response.put("contentAsHtml", note.getContentAsHtml());
-
-		return ok(response);
+		return ok(Json.toJson(note));
 	}
 	
 	public static Result update(String noteId, String notebookId){
-		String markdown = request().body().asJson().get("content").asText();
+		String markdown = request().body().asFormUrlEncoded().get("content")[0];
 		
 		Note note = noteService.updateContent(noteId, markdown);
 		
 		log.info("Sucessfully updated note '{}' with new content : '{}'", note.getId(), note.getContent());
 		
-		ObjectNode response = Json.newObject();
-		response.put("contentAsHtml", note.getContentAsHtml());
-		
-		return ok(response);
+		return ok(Json.toJson(note));
 	}
 	
 	public static Result delete(String noteId, String notebookId){
