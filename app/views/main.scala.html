@@ -25,7 +25,7 @@
         <script type="text/javascript">
 			$.extend(mySettings,{
 				onCtrlEnter: {keepDefault:false, openWith: function(h){
-					$(h.textarea).parents(".tab-content").find(".btn-primary").click();
+					$(h.textarea).parents(".markItUp").parent().parent().find(".btn-primary").click();
 				}}
 			})        
         </script>
@@ -78,12 +78,14 @@
 					</div>
 				</div>
 				<div id="content" class="span9" ng-view>
-					<div id="welcome">
-						Welcome to Notebook!
-					</div>
 				</div>
 			</div>
 		</div>
+		<script type="text/ng-template" id="/welcome.html">
+			<div id="welcome">
+				<img src="http://www.saltmotion.com/wp-content/gallery/2010_11_03/saltmotion_img_3111_2010_11_03.jpg"/>
+			</div>
+		</script>
 		<script type="text/ng-template" id="/noteList.html">
 			<div ng-controller="AddNoteCtrl">
 				<button class="btn btn-small pull-right" ng-click="hidden=false">Add note  <i class="icon-plus-sign"></i></button>

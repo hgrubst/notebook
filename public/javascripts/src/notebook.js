@@ -3,7 +3,8 @@ var notello = angular.module('notello',['ngSanitize']);
 notello.config(function($locationProvider, $routeProvider) {
 	$locationProvider.html5Mode(true).hashPrefix('!');
     $routeProvider.
-    	when('/notebooks/:notebookId', {controller:NoteCtrl, templateUrl:'/noteList.html'});
+    	when('/notebooks/:notebookId', {controller:NoteCtrl, templateUrl:'/noteList.html'}).
+    	when('/', {controller:NoteCtrl, templateUrl:'/welcome.html'});
 });		
 
 notello.directive("markitup", function(){
@@ -14,7 +15,7 @@ notello.directive("markitup", function(){
 	}
 })
 
-function NotebookCtrl($scope, $http) {
+function NotebookCtrl($scope, $http, $location) {
 	$scope.selectedIndex = -1;
 	
 	$http.get(jsRoutes.controllers.NotebookController.list().url).success(function (data){
@@ -23,11 +24,14 @@ function NotebookCtrl($scope, $http) {
 	
 	$scope.delete = function(event, index){
 		event.preventDefault();
+		event.stopPropagation();
 		
 		if(confirm("This will delete the notebook and all notes contained. Are you sure you want to continue?")){
 			var notebook = $scope.notebooks[index];
 			$http.delete(jsRoutes.controllers.NotebookController.delete(notebook.id).url).success(function (data){
+				$scope.selectedIndex = -1;
 				$scope.notebooks.splice(index,1);	
+				$location.path("/");
 			});
 		}
 	}
@@ -83,6 +87,10 @@ function NoteCtrl($scope, $http, $routeParams){
 			});
 		}
 	}
+	
+	$scope.$on('deleteNotebook', function() {
+	    $scope.notes = null;
+	  });
 
 }
 
