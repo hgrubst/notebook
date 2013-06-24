@@ -12,6 +12,8 @@ GET     /                           controllers.NotebookController.index()
 GET     /login                      controllers.Application.login()
 POST    /login                      controllers.Application.authenticate()
 GET     /logout                     controllers.Application.logout()
+GET		/signup						controllers.Application.signup()
+POST    /signup						controllers.Application.createAccount()
 
 #Notebooks
 GET     /notebooks                  controllers.NotebookController.list()

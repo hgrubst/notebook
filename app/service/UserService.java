@@ -2,6 +2,7 @@ package service;
 
 import models.User;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,13 @@ public class UserService {
 		User user = userRepository.findByEmail(email);
 		
 		if(user != null){
-			if(user.getPassword().equals(password)){
-				log.info("Sucessfully authenticated '{}'", email);
-				return true;
+			try {
+				if(BCrypt.checkpw(password, user.getPassword())){
+					log.info("Sucessfully authenticated '{}'", email);
+					return true;
+				}
+			} catch (IllegalArgumentException e) {
+				log.warn("Password check failed for user '{}' : '{}'. Is the password stored in plain text?", email, e.getMessage());
 			}
 		}
 		
@@ -34,5 +39,7 @@ public class UserService {
 		return false;
 	}
 	
-	
+	public User createUser(String email, String password){
+		return userRepository.save(new User(email, BCrypt.hashpw(password, BCrypt.gensalt())));
+	}
 }
