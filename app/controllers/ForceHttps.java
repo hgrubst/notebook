@@ -1,6 +1,7 @@
 package controllers;
 
-import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import play.Play;
 import play.mvc.Action;
@@ -10,15 +11,18 @@ import play.mvc.Result;
 
 public class ForceHttps extends Action.Simple{
 
-	private static String SSL_HEADER_CLOUD_FOUNDRY = "SSLSESSIONID";
+	static Logger log = LoggerFactory.getLogger(ForceHttps.class);
+	
+	private static String HTTP_HEADER_SCHEME = "X-Scheme";
+	private static String HTTP_HEADER_HOST = "Host";
 	
 	@Override
 	public Result call(Context ctx) throws Throwable {
 
 		if(!isHttpsRequest(ctx.request())){
-			String redirect = "https://" + ctx.request().host() + ctx.request().uri();
+			String redirect = "https://" + ctx.request().getHeader(HTTP_HEADER_HOST) + ctx.request().uri();
 			
-			System.out.println("Application not using https, redirecting to : " + redirect);
+			log.info("Application not using https, redirecting to : " + redirect);
 			
 			return redirect(redirect);
 		}
@@ -28,12 +32,11 @@ public class ForceHttps extends Action.Simple{
 	
 	
 	private boolean isHttpsRequest(Request request){
- 
 		if(Play.isDev()){
 			return true;
 		}
 		
-		if(StringUtils.isNotEmpty(request.getHeader(SSL_HEADER_CLOUD_FOUNDRY))){
+		if("https".equalsIgnoreCase(request.getHeader(HTTP_HEADER_SCHEME))){
 			return true;
 		}
 		
