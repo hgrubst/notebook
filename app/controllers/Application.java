@@ -54,6 +54,9 @@ public class Application extends Controller {
 
 		@Required(message="Password confirmation is required")
 		public String confirmPassword;
+		
+		@Required(message="You must answer the question")
+		public Integer answer;
 
 		public List<ValidationError> validate() {
 			
@@ -67,6 +70,10 @@ public class Application extends Controller {
 
 			if (!password.equals(confirmPassword)) {
 				errors.add(new ValidationError("", "Passwords do not match", null));
+			}
+			
+			if(answer != 8){
+				errors.add(new ValidationError("", "The answer is incorrect. Please try again", null));
 			}
 
 			return errors.isEmpty() ? null : errors;
