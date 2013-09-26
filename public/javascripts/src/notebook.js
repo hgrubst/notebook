@@ -22,6 +22,7 @@ function NotebookCtrl($scope, $http, $location) {
 		$scope.notebooks = data;	
 	});
 	
+	
 	$scope.delete = function(event, index){
 		event.preventDefault();
 		event.stopPropagation();
@@ -57,8 +58,10 @@ function NoteCtrl($scope, $http, $routeParams){
 	
 	$http.get(jsRoutes.controllers.NoteController.list($routeParams.notebookId).url).success(function (data){
 		$scope.notes = data;
+		hljs.initHighlightingOnLoad();
 	});
 
+	
 	$scope.cancel = function(note){
 		note.mode='view';
 		$("#note-" + note.id).find("textarea").val(note.content);//could not find out how to cancel user changes without explicitly reseting the value in jquery
