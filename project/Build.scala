@@ -18,6 +18,7 @@ object ApplicationBuild extends Build {
     	"org.cloudfoundry" % "cloudfoundry-runtime" % "0.8.2",
         "org.markdownj" % "markdownj" % "0.3.0-1.0.2b4",
         "org.mindrot" % "jbcrypt" % "0.3m"
+        "org.hibernate" % "hibernate-validator" % "4.2.0.Final"
     )
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = JAVA).settings(
