@@ -84,6 +84,7 @@ public class Application extends Controller {
 	 * Login page.
 	 */
 	public static Result login() {
+		log.debug("--------Entering login");
 		return ok(login.render(form(Login.class)));
 	}
 
