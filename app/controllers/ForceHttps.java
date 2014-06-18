@@ -13,7 +13,9 @@ public class ForceHttps extends Action.Simple{
 
 	static Logger log = LoggerFactory.getLogger(ForceHttps.class);
 	
-	private static String HTTP_HEADER_SCHEME = "X-Scheme";
+//	private static String HTTP_HEADER_SCHEME = "X-Scheme";
+	//the x-forwarded proto is used by heroku see here : https://devcenter.heroku.com/articles/http-routing#heroku-headers
+	private static String HTTP_HEADER_SCHEME = "X-Forwarded-Proto";
 	private static String HTTP_HEADER_HOST = "Host";
 	
 	@Override
