@@ -1,12 +1,3 @@
-logs
-project/project
-project/target
-target
-tmp
-.history
+public/bower_components
+node_modules
 dist
-.project
-.classpath
-.settings
-.target
-

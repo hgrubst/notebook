@@ -1,0 +1,27 @@
+{
+  "name": "quick-fiddle",
+  "version": "2.0.0",
+  "homepage": "https://github.com/hgrubst/koakickstart",
+  "authors": [
+    "aclement <aclement2@gmail.com>"
+  ],
+  "description": "Notebook taking app",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.4",
+    "bootstrap": "^3.3.1",
+    "less.js": "^2.2.0",
+    "modernizr": "^2.8.3",
+    "ui-router": "^0.2.13",
+    "font-awesome": "~4.4.0",
+    "animate.css": "~3.4.0"
+  }
+}
