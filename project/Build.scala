@@ -26,6 +26,9 @@ object ApplicationBuild extends Build {
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = JAVA).settings(
       // Add your own project settings here
       
+      // Force compilation in java 1.7
+	  javacOptions in Compile ++= Seq("-source", "1.7", "-target", "1.7"),
+      
       //for spring
       resolvers += "Spring Maven Release Repository" at "http://repo.springsource.org/libs-release",
 
