@@ -1,17 +1,20 @@
-#Koa kickstart
+# Notello application
+Simple application allowing to record notes organised by notebooks
 
-Quick fiddle is a html/js/css fiddler that includes the following : 
-Application template for the following stack
-- angular
-- bootstrap
-- animate.css
-- less
-- bower
-- gulp
-- koa
+# Technical Stack
+
+## Backend
+Microservices based on Spring
+
+## Frontend
+Angular
+
+## Authentication 
+Auth0
 
 
-##Usage
-- clone the git repo : `git clone git@github.com:hgrubst/quickFiddle.git`
-- run `npm install`
-- run gulp serve
+
+how to resign token for internal microservices : 
+- access token got from auth0 on the client directly (auth code grant)
+- call auth0 from gateway to resign token with different key
+- or just accept initial access token directly in internal microservices
