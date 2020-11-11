@@ -1,9 +1,20 @@
 server:
   port: 8081
 
-spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri : https://aclement.au.auth0.com/
+logging:
+  level:
+    fr.acle: DEBUG
+    org.springframework: DEBUG
+
+
+notello:
+  endpoints :
+    note : http://localhost:8082
+    anotherOne : http://localhost:8083
+
+#spring:
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          issuer-uri : https://aclement.au.auth0.com/

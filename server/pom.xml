@@ -8,10 +8,9 @@
 		<version>2.3.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>fr.aclement.notello</groupId>
+	<groupId>fr.acle.notello</groupId>
 	<artifactId>notello-parent-pom</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Notello</name>
 	<description>Simple notes application</description>
 	<packaging>pom</packaging>
 
@@ -21,7 +20,9 @@
 	</properties>
 
 	<modules>
+		<module>common</module>
 		<module>gateway</module>
-		<module>notebook</module>
+		<module>note</module>
+		<module>note-api-client</module>
 	</modules>
 </project>

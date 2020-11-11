@@ -12,8 +12,9 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
     val log = LoggerFactory.getLogger(SecurityConfig::class.java)
 
     override fun configure(http: HttpSecurity) {
-        log.info("Running configure")
-        http.authorizeRequests { it.anyRequest().authenticated() }.oauth2ResourceServer().jwt()
+//        log.info("Running configure")
+//        http.authorizeRequests { it.anyRequest().authenticated() }.oauth2ResourceServer().jwt()
+        http.authorizeRequests { it.anyRequest().permitAll() }
     }
 
 //    override fun configure(auth: AuthenticationManagerBuilder?) {

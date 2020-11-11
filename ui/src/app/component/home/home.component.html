@@ -1,0 +1,9 @@
+<h1>Notello</h1>
+
+<ng-container *ngIf="auth.isAuthenticated$ | async; else publicHome">
+    <a [routerLink]="['/notebook']">View Notebooks</a>
+</ng-container>
+
+<ng-template #publicHome>
+    <mat-icon>info</mat-icon> Notello is a simple and easy way to take notes.
+</ng-template>

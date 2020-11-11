@@ -1,6 +1,10 @@
 import { Component, Injectable, OnInit } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { NotebookService } from 'src/app/service/notebook.service';
+import { ActivatedRoute, ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
+import { AuthService } from '@auth0/auth0-angular';
+import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { NotebookSearchRequest } from 'src/app/model/NotebookSearchRequest';
+import { NoteService } from 'src/app/service/note.service';
 
 
 @Injectable({
@@ -8,12 +12,24 @@ import { NotebookService } from 'src/app/service/notebook.service';
 })
 export class NotebookListResolve implements Resolve<any[]> {
 
-  constructor(public notebookService: NotebookService) {
+  constructor(public noteService: NoteService, public auth: AuthService, private router: Router) {
 
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return this.notebookService.searchNotebooks()
+  async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<any> {
+    return this.auth.user$.pipe(take(1)).subscribe(async user => {
+      let searchRequest = new NotebookSearchRequest();
+      searchRequest.userEmail = user.email
+      let notebooks = await this.noteService.searchNotebooks(searchRequest);
+
+      if (state.url.endsWith('/notebook') && notebooks.numberOfElements > 0) {
+        console.log('redirecting to notebook', notebooks.content[0].id)
+        //redirect to the first notebook directly here
+        this.router.navigate(['/notebook', notebooks.content[0].id])
+      }
+
+      return notebooks;
+    });
   }
 }
 
