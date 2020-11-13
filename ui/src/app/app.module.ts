@@ -7,6 +7,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
@@ -83,6 +84,7 @@ export const metaReducers = environment.production ? [] : [ngrxLogger];
     MatGridListModule,
     MatCardModule,
     MatMenuModule,
+    MatProgressSpinnerModule,
     StoreModule.forRoot(rootReducer, {
       metaReducers
     }),

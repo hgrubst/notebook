@@ -17,7 +17,11 @@
   </ng-template>
 </mat-toolbar>
 
-{{notebooks}}
+<div class="overlay" *ngIf="spinner$ | async">
+  <div class="center">
+    <mat-spinner style="margin : 0 50%"></mat-spinner>
+  </div>
+</div>
 
 <mat-sidenav-container autosize>
   <mat-sidenav *ngIf="auth.isAuthenticated$" style="height:100%" [fixedTopGap]="64" fixedInViewport [mode]="'side'"
@@ -30,3 +34,4 @@
   </mat-sidenav-content>
 
 </mat-sidenav-container>
+
