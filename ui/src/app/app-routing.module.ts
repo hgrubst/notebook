@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@auth0/auth0-angular';
 import { HomeComponent } from './component/home/home.component';
-import { NotebookDisplayComponent, NotebookNotesResolve } from './component/notebook-display/notebook-display.component';
+import { NotebookDisplayComponent, NotebookResolve } from './component/notebook-display/notebook-display.component';
 import { NotebookListComponent, NotebookListResolve } from './component/notebook-list/notebook-list.component';
 
 const routes: Routes = [
@@ -22,7 +22,7 @@ const routes: Routes = [
         path: ':id',
         component: NotebookDisplayComponent,
         resolve: {
-          notebook: NotebookNotesResolve
+          notebook: NotebookResolve
         }
       }
     ]

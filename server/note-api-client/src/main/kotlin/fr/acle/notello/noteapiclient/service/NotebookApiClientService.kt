@@ -18,9 +18,9 @@ class NotebookApiClientService(val restTemplate: RestTemplate, val notelloProper
     val log = LoggerFactory.getLogger(NotebookApiClientService::class.java)
 
     fun searchNotebooks(params: Map<String, String>): Page<Notebook> {
-        log.debug("Notello endpoints {}", notelloProperties.endpoints.get("note"))
+        log.debug("Notello endpoints {}", notelloProperties.endpoints["note"])
 
-        val uriBuilder = UriComponentsBuilder.fromUriString("${notelloProperties.endpoints.get("note")}/note/notebook")
+        val uriBuilder = UriComponentsBuilder.fromUriString("${notelloProperties.endpoints["note"]}/note/notebook")
         params.forEach { uriBuilder.queryParam(it.key, it.value) }
 
         val responseEntity = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET, null, typeReference<RestResponsePage<Notebook>>())
@@ -29,11 +29,11 @@ class NotebookApiClientService(val restTemplate: RestTemplate, val notelloProper
     }
 
     fun createNotebook(notebookCreateRequest: NotebookCreateRequest): Notebook? {
-        return restTemplate.postForObject("${notelloProperties.endpoints.get("note")}/note/notebook", notebookCreateRequest, Notebook::class.java)
+        return restTemplate.postForObject("${notelloProperties.endpoints["note"]}/note/notebook", notebookCreateRequest, Notebook::class.java)
     }
 
     fun getNotebook(notebookId : String): Notebook {
-        return restTemplate.getForObject(notelloProperties.endpoints.getValue("note"), Notebook::class.java)!!
+        return restTemplate.getForObject("${notelloProperties.endpoints["note"]}/note/notebook/${notebookId}", Notebook::class.java)!!
     }
 
 

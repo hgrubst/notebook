@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { createAction, props, Store } from '@ngrx/store';
+import { take } from 'rxjs/operators';
 import { Notebook } from '../model/Notebook';
 import { NotebookSearchRequest } from '../model/NotebookSearchRequest';
 import { PagedSearchResponse } from '../model/PagedSearchResponse';
@@ -23,8 +24,13 @@ export class NotebookActions {
 
     }
 
-    async searchNotebooks(notebookSearchRequest: NotebookSearchRequest) {
+    async searchNotebooks(notebookSearchRequest?: NotebookSearchRequest) {
         try {
+
+            if (!notebookSearchRequest) {
+                notebookSearchRequest = (await this.store.pipe(take(1)).toPromise()).notebook.notebookSearchRequest
+            }
+
             this.store.dispatch(NotebookActions.searchNotebookRequest({ notebookSearchRequest }));
 
             let notebooks = await this.noteService.searchNotebooks(notebookSearchRequest)

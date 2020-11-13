@@ -7,6 +7,7 @@ import fr.acle.notello.noteapiclient.dto.NotebookSearchRequest
 import fr.acle.notello.noteapiclient.dto.NotebookUpdateRequest
 import fr.acle.notello.note.repository.NoteRepository
 import fr.acle.notello.note.repository.NotebookRepository
+import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -15,9 +16,11 @@ import org.springframework.stereotype.Service
 @Service
 class NotebookService(val notebookRepository: NotebookRepository, val noteRepository: NoteRepository) {
 
+    val log = LoggerFactory.getLogger(NotebookService::class.java)
+
     fun searchNotebooks(notebookSearchRequest: NotebookSearchRequest): Page<Notebook> {
-        //TODO : need to have a generic search method
         val notebooks = notebookRepository.search(notebookSearchRequest)
+        notebooks.forEach { it.loadNotes() }
         return notebooks
     }
 
@@ -29,7 +32,8 @@ class NotebookService(val notebookRepository: NotebookRepository, val noteReposi
     }
 
     fun getNotebook(id: String): Notebook {
-        return notebookRepository.findByIdOrNull(id)!!
+        val notebook = notebookRepository.findByIdOrNull(id)!!
+        return notebook.loadNotes();
     }
 
     fun updateNotebook(notebookId: String, notebookUpdateRequest: NotebookUpdateRequest): Notebook {
@@ -37,7 +41,7 @@ class NotebookService(val notebookRepository: NotebookRepository, val noteReposi
         val notebook: Notebook = notebookRepository.findByIdOrNull(notebookId)!!
         notebook.title = notebookUpdateRequest.title;
         notebookRepository.save(notebook)
-        return notebook
+        return notebook.loadNotes();
     }
 
     fun delete(notebookId: String): Notebook {

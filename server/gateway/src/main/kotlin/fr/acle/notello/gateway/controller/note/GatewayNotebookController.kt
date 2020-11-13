@@ -17,7 +17,7 @@ class GatewayNotebookController(val notebookApiClientService: NotebookApiClientS
     }
 
     @GetMapping("/{id}")
-    fun getNotebook(@RequestAttribute id: String): Notebook {
+    fun getNotebook(@PathVariable id: String): Notebook {
         return notebookApiClientService.getNotebook(id);
     }
 

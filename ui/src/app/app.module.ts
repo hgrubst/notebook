@@ -1,28 +1,37 @@
+import { LayoutModule } from '@angular/cdk/layout';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { NotebookListComponent } from './component/notebook-list/notebook-list.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-import { LayoutModule } from '@angular/cdk/layout';
-import { MatButtonModule } from '@angular/material/button';
-import { MatListModule } from '@angular/material/list';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatCardModule } from '@angular/material/card';
-import { MatMenuModule } from '@angular/material/menu';
-import { SidebarComponent } from './component/sidebar/sidebar.component';
-import { NotebookDisplayComponent } from './component/notebook-display/notebook-display.component';
-import { NoteDisplayComponent } from './component/note-display/note-display.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
+import { ActionReducer, StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
 import { HomeComponent } from './component/home/home.component';
-import { StoreModule } from '@ngrx/store';
-import { NotebookReducer } from './reducers/NotebookReducer';
-import { NoteReducer } from './reducers/NoteReducer';
-import { rootReducer } from './reducers/RootReducer';
+import { NoteDisplayComponent } from './component/note-display/note-display.component';
+import { NotebookDisplayComponent } from './component/notebook-display/notebook-display.component';
+import { NotebookListComponent } from './component/notebook-list/notebook-list.component';
+import { SidebarComponent } from './component/sidebar/sidebar.component';
+import { NotelloState, rootReducer } from './reducers/RootReducer';
+import { environment } from '../environments/environment';
+import { storeLogger } from 'ngrx-store-logger';
+
+export function ngrxLogger(reducer: ActionReducer<NotelloState>): any {
+  // default, no options
+  return storeLogger()(reducer);
+}
+
+export const metaReducers = environment.production ? [] : [ngrxLogger];
+
 
 @NgModule({
   declarations: [
@@ -52,7 +61,7 @@ import { rootReducer } from './reducers/RootReducer';
         allowedList: [
           {
             // Match any request that starts 'https://YOUR_DOMAIN/api/v2/' (note the asterisk)
-            uri: '/gw/api/*',
+            uri: '/gw/*',
             tokenOptions: {
               // The attached token should target this audience
               audience: 'https://aclement.au.auth0.com/api/v2/',
@@ -74,7 +83,14 @@ import { rootReducer } from './reducers/RootReducer';
     MatGridListModule,
     MatCardModule,
     MatMenuModule,
-    StoreModule.forRoot(rootReducer, {}),
+    StoreModule.forRoot(rootReducer, {
+      metaReducers
+    }),
+    // Instrumentation must be imported after importing StoreModule (config is optional)
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      logOnly: environment.production, // Restrict extension to log-only mode
+    }),
 
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true },],

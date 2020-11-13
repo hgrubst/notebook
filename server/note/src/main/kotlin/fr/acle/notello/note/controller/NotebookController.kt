@@ -23,8 +23,13 @@ class NotebookController(val notebookService: NotebookService) {
         return notebookService.createNotebook(notebookCreateRequest)
     }
 
+    @GetMapping("/{id}")
+    fun getNotebook(@PathVariable id: String): Notebook {
+        return notebookService.getNotebook(id)
+    }
+
     @PutMapping("/{id}")
-    fun updateNotebook(@RequestParam id: String, @Valid @RequestBody notebookUpdateRequest: NotebookUpdateRequest): Notebook {
+    fun updateNotebook(@PathVariable id: String, @Valid @RequestBody notebookUpdateRequest: NotebookUpdateRequest): Notebook {
         return notebookService.updateNotebook(id, notebookUpdateRequest)
     }
 

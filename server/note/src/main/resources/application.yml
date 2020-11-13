@@ -1,9 +1,17 @@
 server:
   port: 8082
 
+logging:
+  level:
+    fr.acle: DEBUG
+
 spring:
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri : https://aclement.au.auth0.com/
+
+  data:
+    mongodb:
+      database: notello

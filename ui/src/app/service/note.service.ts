@@ -5,6 +5,7 @@ import { Note } from '../model/Note';
 import { Notebook } from '../model/Notebook';
 import { NotebookSearchRequest } from '../model/NotebookSearchRequest';
 import { NoteSearchRequest } from '../model/NoteSearchRequest';
+import { NoteUpdateRequest } from '../model/NoteUpdateRequest';
 import { PagedSearchResponse } from '../model/PagedSearchResponse';
 
 @Injectable({
@@ -24,5 +25,13 @@ export class NoteService {
 
   public async searchNotes(noteSearchRequest: NoteSearchRequest) {
     return this.http.get<PagedSearchResponse<Note>>(`/gw/note/note?${qs.stringify(noteSearchRequest)}`).toPromise()
+  }
+
+  public async updateNote(noteId: string, noteUpdateRequest: NoteUpdateRequest) {
+    return this.http.put<Note>(`/gw/note/note/${noteId}`, noteUpdateRequest).toPromise()
+  }
+
+  public async deleteNote(noteId: string) {
+    return this.http.delete<Note>(`/gw/note/note/${noteId}`).toPromise()
   }
 }

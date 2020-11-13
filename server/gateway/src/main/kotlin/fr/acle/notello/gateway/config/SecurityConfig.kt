@@ -14,7 +14,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity) {
 //        log.info("Running configure")
 //        http.authorizeRequests { it.anyRequest().authenticated() }.oauth2ResourceServer().jwt()
-        http.authorizeRequests { it.anyRequest().permitAll() }
+        http.csrf().disable().authorizeRequests { it.anyRequest().permitAll() }
     }
 
 //    override fun configure(auth: AuthenticationManagerBuilder?) {

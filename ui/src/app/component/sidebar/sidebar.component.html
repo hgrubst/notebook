@@ -1,3 +1,9 @@
-<mat-nav-list *ngFor="let notebook of notebooks$|async">
-    <a mat-list-item [routerLink]="['/notebook', notebook.id]">{{notebook.title}}</a>
-</mat-nav-list>
+<div style="padding:0px 20px">
+    <button mat-raised-button primary color="primary" (click)="onRefreshClicked()">
+        Refresh <mat-icon>refresh</mat-icon>
+    </button>
+    
+    <mat-nav-list *ngFor="let notebook of notebooks$|async">
+        <a mat-list-item [routerLink]="['/notebook', notebook.id]">{{notebook.title}}</a>
+    </mat-nav-list>
+</div>

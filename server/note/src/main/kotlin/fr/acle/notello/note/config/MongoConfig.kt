@@ -1,6 +1,7 @@
 package fr.acle.notello.note.config
 
 import fr.acle.notello.common.model.Auditor
+import fr.acle.notello.note.repository.NotebookEntityCallback
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.domain.AuditorAware

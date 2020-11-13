@@ -52,4 +52,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.unsubscribe$.next();
   }
 
+  async onRefreshClicked(){
+    this.notebookActions.searchNotebooks()
+  }
+
 }

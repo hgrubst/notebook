@@ -1,7 +1,11 @@
 package fr.acle.notello.noteapiclient.model
 
-class Note(val id: String,
-           val content: String,
-           val position: Int,
-           val notebookId: String) {
+class Note(
+        val id: String,
+        val content: String,
+        val position: Int,
+        val notebookId: String
+) {
+
+    constructor() : this("", "", 0, "")
 }
