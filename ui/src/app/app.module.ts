@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
@@ -25,6 +26,7 @@ import { SidebarComponent } from './component/sidebar/sidebar.component';
 import { NotelloState, rootReducer } from './reducers/RootReducer';
 import { environment } from '../environments/environment';
 import { storeLogger } from 'ngrx-store-logger';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 export function ngrxLogger(reducer: ActionReducer<NotelloState>): any {
   // default, no options
@@ -47,6 +49,7 @@ export const metaReducers = environment.production ? [] : [ngrxLogger];
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    ReactiveFormsModule,
     // Import the module into the application, with configuration
     AuthModule.forRoot({
       domain: 'aclement.au.auth0.com',
@@ -84,7 +87,9 @@ export const metaReducers = environment.production ? [] : [ngrxLogger];
     MatGridListModule,
     MatCardModule,
     MatMenuModule,
+    MatInputModule,
     MatProgressSpinnerModule,
+
     StoreModule.forRoot(rootReducer, {
       metaReducers
     }),

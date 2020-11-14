@@ -1,12 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { Store } from '@ngrx/store';
-import { Observable, of, Subject } from 'rxjs';
-import { distinctUntilChanged, filter, map, mapTo, pairwise, switchMap, take, takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 import { NotebookActions } from 'src/app/actions/NotebookActions';
 import { Notebook } from 'src/app/model/Notebook';
 import { NotebookSearchRequest } from 'src/app/model/NotebookSearchRequest';
-import { PagedSearchResponse } from 'src/app/model/PagedSearchResponse';
 import { NotelloState } from 'src/app/reducers/RootReducer';
 import { NoteService } from 'src/app/service/note.service';
 

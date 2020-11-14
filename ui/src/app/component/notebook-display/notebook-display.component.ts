@@ -1,4 +1,5 @@
 import { Component, Injectable, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -33,21 +34,12 @@ export class NotebookResolve implements Resolve<Promise<any>> {
 export class NotebookDisplayComponent implements OnInit {
   notes$: Observable<Note[]>;
 
+  notesEditModeToggle: { [id: string]: { editMode: boolean, formGroup: FormGroup } } = {}
+
   constructor(private route: ActivatedRoute, private store: Store<NotelloState>, private noteActions: NoteActions) { }
 
   ngOnInit(): void {
     this.notes$ = this.store.select(store => store.notebook.selectedNotebook.notes)
   }
 
-  async onEditClicked(note: Note) {
-    const noteUpdateRequest = new NoteUpdateRequest();
-    noteUpdateRequest.content = note.content + Date.now().toString();
-    noteUpdateRequest.position = note.position;
-    
-    await this.noteActions.updateNote(note.id, noteUpdateRequest)
-  }
-
-  async onDeleteClicked(noteId: string) {
-    await this.noteActions.deleteNote(noteId)
-  }
 }

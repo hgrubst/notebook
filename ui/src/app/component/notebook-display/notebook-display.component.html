@@ -1,13 +1,4 @@
 <div *ngFor="let note of notes$|async">
-
-    <mat-card>
-        <mat-card-actions>
-            <button mat-button title="Edit" color="primary" (click)="onEditClicked(note)"><mat-icon>edit</mat-icon></button>
-            <button mat-button title="Delete" color="warn" (click)="onDeleteClicked(note.id)"><mat-icon>delete</mat-icon></button>
-        </mat-card-actions>
-        <mat-card-content [innerHTML]="note.content"></mat-card-content>
-    </mat-card>
+    <app-note-display [note]="note"></app-note-display>
     
-
-
 </div>

@@ -1,1 +1,30 @@
-<p [innerHTML]="note.contentAsHtml"></p>
+<mat-card>
+    <ng-container *ngIf="!editMode">
+        <mat-card-actions>
+            <button mat-button title="Edit" color="primary" (click)="editMode=true">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-button title="Delete" color="warn" (click)="onDeleteClicked(note.id)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </mat-card-actions>
+        <mat-card-content [innerHTML]="note.content"></mat-card-content>
+    </ng-container>
+
+
+    <ng-container *ngIf="editMode" [formGroup]="noteEditForm">
+        <mat-form-field style="width:100%">
+            <mat-label>Edit Note</mat-label>
+            <textarea formControlName="content" matInput [value]="note.content" cdkTextareaAutosize></textarea>
+
+        </mat-form-field>
+        <mat-card-actions>
+            <button mat-button title="Save" color="primary" (click)="onUpdateNoteClicked(note)">
+                <mat-icon>save</mat-icon>
+            </button>
+            <button mat-button title="Cancel" color="warn" (click)="editMode =false">
+                <mat-icon>cancel</mat-icon>
+            </button>
+        </mat-card-actions>
+    </ng-container>
+</mat-card>
