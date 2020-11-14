@@ -1,14 +1,15 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
@@ -16,6 +17,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 import { ActionReducer, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { storeLogger } from 'ngrx-store-logger';
+import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './component/home/home.component';
@@ -24,9 +27,7 @@ import { NotebookDisplayComponent } from './component/notebook-display/notebook-
 import { NotebookListComponent } from './component/notebook-list/notebook-list.component';
 import { SidebarComponent } from './component/sidebar/sidebar.component';
 import { NotelloState, rootReducer } from './reducers/RootReducer';
-import { environment } from '../environments/environment';
-import { storeLogger } from 'ngrx-store-logger';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MarkdownPipe } from './pipes/markdown.pipe';
 
 export function ngrxLogger(reducer: ActionReducer<NotelloState>): any {
   // default, no options
@@ -43,7 +44,8 @@ export const metaReducers = environment.production ? [] : [ngrxLogger];
     SidebarComponent,
     NotebookDisplayComponent,
     NoteDisplayComponent,
-    HomeComponent
+    HomeComponent,
+    MarkdownPipe,
   ],
   imports: [
     BrowserModule,
