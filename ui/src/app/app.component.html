@@ -1,21 +1,4 @@
-<mat-toolbar>
-  <!-- <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-    <mat-icon>menu</mat-icon>
-  </button> -->
-  <span>Notello</span>
-  <span class="example-spacer"></span>
-  <ng-container *ngIf="auth.isAuthenticated$ | async; else loggedOutMenu">
-    <span>Arthur Clement</span>
-    <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-      <mat-icon>logout</mat-icon>
-    </button>
-  </ng-container>
-  <ng-template #loggedOutMenu>
-    <button mat-icon-button class="example-icon favorite-icon" (click)="auth.loginWithRedirect()">
-      <mat-icon>login</mat-icon>
-    </button>
-  </ng-template>
-</mat-toolbar>
+<app-header></app-header>
 
 <div class="overlay" *ngIf="spinner$ | async">
   <div class="center">
@@ -24,14 +7,12 @@
 </div>
 
 <mat-sidenav-container autosize>
-  <mat-sidenav *ngIf="auth.isAuthenticated$" style="height:100%" [fixedTopGap]="64" fixedInViewport [mode]="'side'"
-    [opened]="auth.isAuthenticated$ | async">
-    <app-sidebar></app-sidebar>
-  </mat-sidenav>
+    <mat-sidenav *ngIf="auth.isAuthenticated$ | async" style="height:100%" [fixedTopGap]="64" fixedInViewport [mode]="'side'" [opened]="true">
+      <app-sidebar></app-sidebar>
+    </mat-sidenav>
 
   <mat-sidenav-content>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
-
 </mat-sidenav-container>
 

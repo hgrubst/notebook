@@ -28,6 +28,7 @@ import { NotebookListComponent } from './component/notebook-list/notebook-list.c
 import { SidebarComponent } from './component/sidebar/sidebar.component';
 import { NotelloState, rootReducer } from './reducers/RootReducer';
 import { MarkdownPipe } from './pipes/markdown.pipe';
+import { HeaderComponent } from './component/header/header.component';
 
 export function ngrxLogger(reducer: ActionReducer<NotelloState>): any {
   // default, no options
@@ -46,6 +47,7 @@ export const metaReducers = environment.production ? [] : [ngrxLogger];
     NoteDisplayComponent,
     HomeComponent,
     MarkdownPipe,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
