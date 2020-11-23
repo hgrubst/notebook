@@ -3,6 +3,7 @@
 case $APP_NAME in
     notello-gw) 
         echo "Building $APP_NAME"
+        yarn --cwd ui
         yarn --cwd ui run build:prod
         server/mvnw package -Dmaven.skip.tests=true
     ;;
