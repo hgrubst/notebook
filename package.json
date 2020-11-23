@@ -2,6 +2,6 @@
     "name": "notello",
     "version": "0.0.0",
     "scripts": {
-        "heroku-postinstall": "yarn --cwd ui build:prod"
+        "heroku-postinstall": "bash -x heroku-deploy.sh"
     }
 }
