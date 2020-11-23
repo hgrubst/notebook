@@ -3,7 +3,7 @@
 case $APP_NAME in
     notello-gw) 
         echo "Building $APP_NAME"
-        yarn --cwd ui
+        cd ui && yarn install
         ls -la ui/node_modules/.bin
         ls -la ui/node_modules
         yarn --cwd ui run build:prod
