@@ -3,6 +3,7 @@ node_modules
 dist
 .idea
 bin
+yarn-error.log
 # .mvn/timing.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 # .mvn/wrapper/maven-wrapper.jar

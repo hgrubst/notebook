@@ -15,6 +15,7 @@
 	<description>Notello Gateway</description>
 
 	<properties>
+		<frontend-maven-plugin-version>1.10.3</frontend-maven-plugin-version>
 	</properties>
 
 	<dependencies>
@@ -106,6 +107,56 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+			<plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>${frontend-maven-plugin-version}</version>
+                <executions>
+                    <execution>
+                        <id>install node and yarn</id>
+                        <goals>
+                            <goal>install-node-and-yarn</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>yarn install</id>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>ng build</id>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>run build:prod</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>ng clean</id>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <phase>clean</phase>
+                        <configuration>
+                            <arguments>run clean</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+					<!--https://nodejs.org/dist/-->
+					<nodeVersion>latest-v14.x</nodeVersion>
+					<!-- https://github.com/yarnpkg/yarn/tags-->
+					<yarnVersion>1.22.10</yarnVersion>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 

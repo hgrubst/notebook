@@ -1,6 +1,8 @@
 #Stage 1 build
 FROM adoptopenjdk/openjdk11:alpine as build
 
+RUN apk add --no-cache yarn
+
 # Cache server side deps
 
 ## Copy the maven wrapper
@@ -15,7 +17,6 @@ WORKDIR /code/server/common
 RUN ./mvnw dependency:go-offline
 
 #Cache UI deps
-RUN apk add yarn
 COPY ui/package.json ui/yarn.lock /code/ui/
 WORKDIR /code/ui
 RUN yarn --frozen-lockfile

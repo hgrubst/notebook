@@ -1,0 +1,7 @@
+{
+    "name": "notello",
+    "version": "0.0.0",
+    "scripts": {
+        "heroku-postinstall": "yarn --cwd ui build:prod"
+    }
+}
