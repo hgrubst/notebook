@@ -3,10 +3,8 @@
 case $APP_NAME in
     notello-gw) 
         echo "Building $APP_NAME"
-        cd ui && yarn install
-        ls -la ui/node_modules/.bin
-        ls -la ui/node_modules
-        yarn --cwd ui run build:prod
+        yarn --cwd ui
+        ui/node_modules/.bin/ng build --prod
         server/mvnw package -Dmaven.skip.tests=true
     ;;
     *) 
