@@ -18,6 +18,20 @@
 		<frontend-maven-plugin-version>1.10.3</frontend-maven-plugin-version>
 	</properties>
 
+	<profiles>
+		<profile>
+			<id>heroku</id>
+			<activation>
+<!--				<property>-->
+<!--					<name>env.DYNO</name>-->
+<!--				</property>-->
+				<property>
+					<name>env.PATH_TO_JAR</name>
+					<value>!gateway/target/notello-gateway-0.0.1-SNAPSHOT.jar</value>
+				</property>
+			</activation>
+		</profile>
+	</profiles>
 	<dependencies>
 		<dependency>
 			<groupId>fr.acle.notello</groupId>
@@ -111,8 +125,12 @@
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>${frontend-maven-plugin-version}</version>
+
                 <executions>
                     <execution>
+						<configuration><skip>
+
+						</skip></configuration>
                         <id>install node and yarn</id>
                         <goals>
                             <goal>install-node-and-yarn</goal>

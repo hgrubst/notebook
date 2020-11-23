@@ -1,0 +1,1 @@
+web: java -Dspring.profiles.active=production -jar $PATH_TO_JAR

@@ -1,0 +1,12 @@
+logging:
+  level:
+    fr.acle: DEBUG
+
+notello:
+  endpoints:
+    note: http://localhost:8082
+
+spring:
+  resources:
+    staticLocations:
+      - ui/dist/ui
