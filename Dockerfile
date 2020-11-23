@@ -17,8 +17,8 @@ WORKDIR /code/server/common
 RUN ./mvnw dependency:go-offline
 
 #Cache UI deps
-COPY ui/package.json ui/yarn.lock /code/ui/
-WORKDIR /code/ui
+COPY server/ui/package.json server/ui/yarn.lock /code/server/ui/
+WORKDIR /code/server/ui
 RUN yarn --frozen-lockfile
 
 #Cache the other poms. If any of them change, some deps will be downloaded again here but we should still have a lot from the install of common 
@@ -40,7 +40,7 @@ WORKDIR /code/server
 RUN ./mvnw install -Dmaven.test.skip=true
 
 ## Build ui
-WORKDIR /code/ui
+WORKDIR /code/server/ui
 RUN node_modules/.bin/ng build --prod --no-progress
 
 #Stage 2 use artifacts from build
@@ -48,4 +48,4 @@ FROM adoptopenjdk/openjdk11:alpine
 
 #can we do copy target/**/*.jar by any chance ? Otherwise we need to coyp one by one
 COPY --from=0 /code/server/gateway/target/*.jar /app/server/
-COPY --from=0 /code/ui/dist /app/
+COPY --from=0 /code/server/ui/dist /app/server/ui/
