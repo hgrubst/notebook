@@ -1,141 +1,162 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>fr.acle.notello</groupId>
-		<artifactId>notello-parent-pom</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>fr.acle.notello</groupId>
+        <artifactId>notello-parent-pom</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
 
-	<groupId>fr.acle.notello</groupId>
-	<artifactId>notello-gateway</artifactId>
+    <groupId>fr.acle.notello</groupId>
+    <artifactId>notello-gateway</artifactId>
 
-	<description>Notello Gateway</description>
+    <description>Notello Gateway</description>
 
-	<properties>
-		<frontend-maven-plugin-version>1.10.3</frontend-maven-plugin-version>
-	</properties>
+    <properties>
+        <frontend-maven-plugin-version>1.10.3</frontend-maven-plugin-version>
+    </properties>
 
-	<profiles>
-		<profile>
-			<id>heroku</id>
-			<activation>
-<!--				<property>-->
-<!--					<name>env.DYNO</name>-->
-<!--				</property>-->
-				<property>
-					<name>env.PATH_TO_JAR</name>
-					<value>!gateway/target/notello-gateway-0.0.1-SNAPSHOT.jar</value>
-				</property>
-			</activation>
-		</profile>
-	</profiles>
-	<dependencies>
-		<dependency>
-			<groupId>fr.acle.notello</groupId>
-			<artifactId>notello-note-api-client</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>fr.acle.notello</groupId>
-			<artifactId>notello-common</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-oauth2-client</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.module</groupId>
-			<artifactId>jackson-module-kotlin</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jetbrains.kotlin</groupId>
-			<artifactId>kotlin-reflect</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jetbrains.kotlin</groupId>
-			<artifactId>kotlin-stdlib-jdk8</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.junit.vintage</groupId>
-					<artifactId>junit-vintage-engine</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <!--
+        Only build the UI through this pom when deploying to heroku as it takes time.
+        NB : being microservices, we deploy this repo to multiple heroku apps and we want to build
+        the UI only when building for this specific heroku app. This is why the heroku profile is activated
+        based on the PATH_TO_JAR property and not a more heroku style one (eg env.DYNO)
+    -->
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <skipUiBuild>true</skipUiBuild>
+            </properties>
+        </profile>
+        <profile>
+            <id>heroku</id>
+            <activation>
+                <property>
+                    <name>env.PATH_TO_JAR</name>
+                    <value>gateway/target/notello-gateway.jar</value>
+                </property>
+            </activation>
+            <properties>
+                <skipUiBuild>false</skipUiBuild>
+            </properties>
+        </profile>
+    </profiles>
 
-	<build>
-		<sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
-		<testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.jetbrains.kotlin</groupId>
-				<artifactId>kotlin-maven-plugin</artifactId>
-				<configuration>
-					<args>
-						<arg>-Xjsr305=strict</arg>
-					</args>
-					<compilerPlugins>
-						<plugin>spring</plugin>
-					</compilerPlugins>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.jetbrains.kotlin</groupId>
-						<artifactId>kotlin-maven-allopen</artifactId>
-						<version>${kotlin.version}</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-			<plugin>
+    <dependencies>
+        <dependency>
+            <groupId>fr.acle.notello</groupId>
+            <artifactId>notello-note-api-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.acle.notello</groupId>
+            <artifactId>notello-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+        <!--
+            Dont put the version in the final name as it makes it harder for heroku which needs to have an env var
+            targeting the jar
+        -->
+        <finalName>${artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <configuration>
+                    <args>
+                        <arg>-Xjsr305=strict</arg>
+                    </args>
+                    <compilerPlugins>
+                        <plugin>spring</plugin>
+                    </compilerPlugins>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-allopen</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>${frontend-maven-plugin-version}</version>
 
                 <executions>
                     <execution>
-						<configuration><skip>
-
-						</skip></configuration>
                         <id>install node and yarn</id>
                         <goals>
                             <goal>install-node-and-yarn</goal>
                         </goals>
                         <phase>generate-resources</phase>
+                        <configuration>
+                            <skip>${skipUiBuild}</skip>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>yarn install</id>
@@ -144,6 +165,7 @@
                         </goals>
                         <phase>compile</phase>
                         <configuration>
+                            <skip>${skipUiBuild}</skip>
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
@@ -164,18 +186,19 @@
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>
+                            <skip>${skipUiBuild}</skip>
                             <arguments>--cwd ../ui run build:prod</arguments>
                         </configuration>
                     </execution>
                 </executions>
                 <configuration>
-					<!--https://nodejs.org/dist/-->
-					<nodeVersion>v14.15.1</nodeVersion>
-					<!-- https://github.com/yarnpkg/yarn/tags-->
-					<yarnVersion>v1.22.10</yarnVersion>
+                    <!--https://nodejs.org/dist/-->
+                    <nodeVersion>v14.15.1</nodeVersion>
+                    <!-- https://github.com/yarnpkg/yarn/tags-->
+                    <yarnVersion>v1.22.10</yarnVersion>
                 </configuration>
             </plugin>
-		</plugins>
-	</build>
+        </plugins>
+    </build>
 
 </project>

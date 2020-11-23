@@ -1,1 +1,1 @@
-web: java -Dspring.profiles.active=production -jar $PATH_TO_JAR
+web: java -Dspring.profiles.active=production -Dserver.port=$PORT -jar $PATH_TO_JAR
