@@ -126,7 +126,7 @@
                         </goals>
                         <phase>compile</phase>
                         <configuration>
-                            <arguments>install</arguments>
+                            <arguments>--cwd ../ui install</arguments>
                         </configuration>
                     </execution>
                     <execution>
@@ -136,10 +136,10 @@
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>
-                            <arguments>run build:prod</arguments>
+                            <arguments>--cwd ../ui run build:prod</arguments>
                         </configuration>
                     </execution>
-                    <execution>
+                    <!-- <execution>
                         <id>ng clean</id>
                         <goals>
                             <goal>yarn</goal>
@@ -148,13 +148,13 @@
                         <configuration>
                             <arguments>run clean</arguments>
                         </configuration>
-                    </execution>
+                    </execution> -->
                 </executions>
                 <configuration>
 					<!--https://nodejs.org/dist/-->
-					<nodeVersion>latest-v14.x</nodeVersion>
+					<nodeVersion>v14.15.1</nodeVersion>
 					<!-- https://github.com/yarnpkg/yarn/tags-->
-					<yarnVersion>1.22.10</yarnVersion>
+					<yarnVersion>v1.22.10</yarnVersion>
                 </configuration>
             </plugin>
 		</plugins>
