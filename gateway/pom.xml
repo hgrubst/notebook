@@ -126,7 +126,17 @@
                         </goals>
                         <phase>compile</phase>
                         <configuration>
-                            <arguments>--cwd ../ui install</arguments>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install deps</id>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>--cwd ../ui</arguments>
                         </configuration>
                     </execution>
                     <execution>
@@ -139,16 +149,6 @@
                             <arguments>--cwd ../ui run build:prod</arguments>
                         </configuration>
                     </execution>
-                    <!-- <execution>
-                        <id>ng clean</id>
-                        <goals>
-                            <goal>yarn</goal>
-                        </goals>
-                        <phase>clean</phase>
-                        <configuration>
-                            <arguments>run clean</arguments>
-                        </configuration>
-                    </execution> -->
                 </executions>
                 <configuration>
 					<!--https://nodejs.org/dist/-->
