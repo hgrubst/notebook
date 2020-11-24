@@ -37,6 +37,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
+              "deployUrl": "/static/",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,

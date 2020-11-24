@@ -1,3 +1,6 @@
+server:
+  port : 9005
+
 logging:
   level:
     fr.acle: DEBUG
@@ -9,4 +12,4 @@ notello:
 spring:
   resources:
     staticLocations:
-      - ui/dist/ui
+      - file:ui/dist/ui
