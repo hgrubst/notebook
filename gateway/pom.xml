@@ -163,19 +163,9 @@
                         <goals>
                             <goal>yarn</goal>
                         </goals>
-                        <phase>compile</phase>
-                        <configuration>
-                            <skip>${skipUiBuild}</skip>
-                            <arguments>install</arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>install deps</id>
-                        <goals>
-                            <goal>yarn</goal>
-                        </goals>
                         <phase>generate-resources</phase>
                         <configuration>
+                            <skip>${skipUiBuild}</skip>
                             <arguments>--cwd ../ui</arguments>
                         </configuration>
                     </execution>

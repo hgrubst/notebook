@@ -1,6 +1,3 @@
-server:
-  port : 9005
-
 logging:
   level:
     fr.acle: DEBUG
