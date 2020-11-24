@@ -4,7 +4,7 @@ logging:
 
 notello:
   endpoints:
-    note: http://localhost:8082
+    note: https://notello-note.herokuapp.com
 
 spring:
   resources:
