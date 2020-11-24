@@ -15,7 +15,7 @@ import java.io.Serializable
 @Document
 data class Note(
         var content: String,
-        var position: Int,
+        var position: Int = 0,
         @Indexed
         val notebookId: String
 ) : BaseAuditableVersionableDocument(), Serializable {
