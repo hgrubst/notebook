@@ -7,12 +7,16 @@
 </div>
 
 <mat-sidenav-container autosize>
-    <mat-sidenav *ngIf="auth.isAuthenticated$ | async" style="height:100%" [fixedTopGap]="64" fixedInViewport [mode]="'side'" [opened]="true">
-      <app-sidebar></app-sidebar>
-    </mat-sidenav>
+  
+  <mat-sidenav #sidenav  style="height:100%" [fixedTopGap]="64" fixedInViewport
+    mode="side" [opened]="auth.isAuthenticated$ | async">
+    <app-sidebar></app-sidebar>      
+  </mat-sidenav>
 
   <mat-sidenav-content>
+    <button mat-button title="Sidenav" color="primary" (click)="sidenav.toggle()" *ngIf="auth.isAuthenticated$ | async">
+      <mat-icon>menu</mat-icon>
+    </button>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
-

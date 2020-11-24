@@ -1,6 +1,7 @@
 <mat-card>
     <ng-container *ngIf="!editMode">
-        <mat-card-actions>
+        <mat-card-actions align="end">
+            <span class="example-spacer"></span>
             <button mat-button title="Edit" color="primary" (click)="editMode=true">
                 <mat-icon>edit</mat-icon>
             </button>
@@ -13,12 +14,7 @@
 
 
     <ng-container *ngIf="editMode" [formGroup]="noteEditForm">
-        <mat-form-field style="width:100%">
-            <mat-label>Edit Note</mat-label>
-            <textarea formControlName="content" matInput [value]="note.content" cdkTextareaAutosize></textarea>
-
-        </mat-form-field>
-        <mat-card-actions>
+        <mat-card-actions align="end">
             <button mat-button title="Save" color="primary" (click)="onUpdateNoteClicked(note)">
                 <mat-icon>done</mat-icon>
             </button>
@@ -26,5 +22,10 @@
                 <mat-icon>undo</mat-icon>
             </button>
         </mat-card-actions>
+        <mat-form-field style="width:100%">
+            <!-- <mat-label>Edit Note</mat-label> -->
+            <textarea formControlName="content" matInput [value]="note.content" cdkTextareaAutosize></textarea>
+
+        </mat-form-field>
     </ng-container>
 </mat-card>
